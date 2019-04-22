@@ -19,7 +19,7 @@ class User
         if(Auth::check() && Auth::user()->type == '0') {
             return $next($request);
         }elseif (Auth::check() && Auth::user()->type == '1'){
-            return redirect('/admin');
+            return redirect('/home');
         }
     }
 }

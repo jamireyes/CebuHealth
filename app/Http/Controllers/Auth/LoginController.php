@@ -49,7 +49,7 @@ class LoginController extends Controller
             return '/home';
         }
         elseif (Auth::check() && Auth::user()->type == 0) {
-            return '/user';
+            return '/DataEntryUser/create';
         }
     }
 }
