@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -37,7 +38,8 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        //$this->middleware('auth');
+        $this->middleware('admin');
     }
 
     /**
@@ -51,7 +53,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'type' => ['required', 'int'],
+            'RoleID' => ['required'],
         ]);
     }
 
@@ -66,7 +68,12 @@ class RegisterController extends Controller
         return User::create([
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
-            'type' => $data['type'],
+            'RoleID' => $data['RoleID'],
         ]);
+    }
+
+    public function showRegistrationForm(){
+        $roles = Role::all();
+        return view('auth.register')->with('roles', $roles);
     }
 }

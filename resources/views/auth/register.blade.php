@@ -48,12 +48,15 @@
                         </div>
                         
                         <div class="form-group row">
-                            <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Type') }}</label>
+                            <label for="RoleID" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
 
                             <div class="col-md-6">
-                                <select id="type" class="form-control{{ $errors->has('type') ? ' is-invalid' : '' }}" name="type" required autocomplete="type" autofocus>
-                                    <option value="1">Admin</option>
-                                    <option value="0">User</option>
+                                <select id="RoleID" class="form-control{{ $errors->has('RoleID') ? ' is-invalid' : '' }}" name="RoleID" required autocomplete="RoleID" autofocus>
+                                    @if(count($roles) > 1)
+                                        @foreach($roles as $role)
+                                            <option value="{{$role->RoleID}}">{{$role->Description}}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
 
                                 @if ($errors->has('name'))

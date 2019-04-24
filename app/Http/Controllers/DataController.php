@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\DataEntryUser;
+use App\barangay;
+use App\bloodTypes;
+use App\clusters;
+use App\districts;
+use App\mlgu;
+use App\Data;
 use Datatables;
 use DB;
+use Auth;
 
-class UserController extends Controller
+class DataController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +22,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        // $Data = DataEntryUser::all();
-        // return view('DataEntryUser.create', compact('Data'));
+        $datas = Data::all();
+
+        return view('Data.index', compact('datas'));
     }
 
     /**
@@ -27,7 +34,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('DataEntryUser.create');
+        $barangays = barangay::all();
+        $bloodtypes = bloodTypes::all();
+        $clusters = clusters::all();
+        $districts = districts::all();
+        $mlgus = mlgu::all();
+
+        return view('Data.create', compact('barangays', 'bloodtypes', 'clusters', 'districts', 'mlgus'));
     }
 
     /**
@@ -39,10 +52,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'Cluster_No' => 'required',
-            'District_No' => 'required',
+            'ClusterNo' => 'required',
+            'DistrictNo' => 'required',
             'mLGU_No' => 'required',
-            'Barangay_No' => 'required',
+            'BarangayNo' => 'required',
             'LName' => 'required',
             'FName' => 'required',
             'MI' => 'required',
@@ -50,7 +63,7 @@ class UserController extends Controller
             'Gender' => 'required',
             'Weight_kg' => 'required',
             'Height_cm' => 'required',
-            'BloodType_ID' => 'required',
+            'BloodTypeID' => 'required',
             'Contact_No' => 'required',
             'House_No' => 'required',
             'Street_Name' => 'required',
@@ -59,11 +72,12 @@ class UserController extends Controller
             'Barangay' => 'required',
         ]);
 
-        $data = new DataEntryUser;
-        $data->Cluster_No = $request->input('Cluster_No');
-        $data->District_No = $request->input('District_No');
+        $data = new Data;
+        $data->User_ID = Auth::user()->id;
+        $data->ClusterNo = $request->input('ClusterNo');
+        $data->DistrictNo = $request->input('DistrictNo');
         $data->mLGU_No = $request->input('mLGU_No');
-        $data->Barangay_No = $request->input('Barangay_No');
+        $data->BarangayNo = $request->input('BarangayNo');
         $data->LName = $request->input('LName');
         $data->FName = $request->input('FName');
         $data->MI = $request->input('MI');
@@ -71,7 +85,7 @@ class UserController extends Controller
         $data->Gender = $request->input('Gender');
         $data->Weight_kg = $request->input('Weight_kg');
         $data->Height_cm = $request->input('Height_cm');
-        $data->BloodType_ID = $request->input('BloodType_ID');
+        $data->BloodTypeID = $request->input('BloodTypeID');
         $data->Contact_No = $request->input('Contact_No');
         $data->House_No = $request->input('House_No');
         $data->Street_Name = $request->input('Street_Name');

@@ -45,11 +45,11 @@ class LoginController extends Controller
 
     protected function redirectTo( ) 
     {
-        if (Auth::check() && Auth::user()->type == 1) {
+        if (Auth::check() && Auth::user()->RoleID == 1) {
             return '/home';
         }
-        elseif (Auth::check() && Auth::user()->type == 0) {
-            return '/DataEntryUser/create';
+        elseif (Auth::check() && Auth::user()->RoleID == 0) {
+            return '/Data/create';
         }
     }
 }

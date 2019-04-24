@@ -16,10 +16,9 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->type == '1') {
+        if (Auth::check() && Auth::user()->RoleID == '1') {
             return $next($request);
-        }elseif (Auth::check() && Auth::user()->type == '0'){
-            return redirect('/DataEntryUser/create');
         }
+        return redirect('/Data/create');
     }
 }

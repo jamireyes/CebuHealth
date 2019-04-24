@@ -75,7 +75,7 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', 'JAMI-PC'),
+            'host' => env('DB_HOST', 'DESKTOP-6NO0G2V'),
             'port' => env('DB_PORT', ''),
             'database' => env('DB_DATABASE', 'CebuHealthTest'),
             'username' => env('DB_USERNAME', 'sa'),

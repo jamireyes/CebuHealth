@@ -16,10 +16,9 @@ class User
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::check() && Auth::user()->type == '0') {
+        if(Auth::check() && Auth::user()->RoleID == '0') {
             return $next($request);
-        }elseif (Auth::check() && Auth::user()->type == '1'){
-            return redirect('/home');
         }
+        return redirect('/home');
     }
 }

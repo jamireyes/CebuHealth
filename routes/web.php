@@ -16,5 +16,6 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/home', 'HomeController@index')->middleware('auth', 'admin')->name('home');
-Route::resource('DataEntryUser', 'UserController')->middleware('auth', 'user');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::resource('Data', 'DataController')->middleware('auth', 'user', 'admin');
+Route::resource('Account', 'AccountController')->middleware('auth', 'admin');
