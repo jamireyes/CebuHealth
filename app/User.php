@@ -37,9 +37,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $table = 'Users';
+    public $primarykey = 'id';
+
     public function role()
     {
-        return $this->hasOne('App\role', 'RoleID');
+        return $this->hasOne('App\role', 'RoleID', 'RoleID');
     }
 
 }

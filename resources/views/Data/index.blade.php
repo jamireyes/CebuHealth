@@ -3,10 +3,10 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-xl-12 col-md-8">
+        <div class="col-xl-12 col-md-10">
             <h3>Data Entry</h3>
             <hr>
-            <table id="DataEntryTable" class="table table-bordered data-table">
+            <table id="DataEntryTable" class="table table-responsive table-bordered data-table">
                 <thead>
                     <tr>
                         <th>User ID</th>
@@ -35,10 +35,10 @@
                     @foreach($datas as $data)
                         <tr>
                             <td>{{$data->User_ID}}</td>
-                            <td>{{@$data->clusters->Description}}</td>
-                            <td>{{@$data->districts->Description}}</td>
-                            <td>{{@$data->mlgu->Description}}</td>
-                            <td>{{@$data->barangay->Description}}</td>
+                            <td>{{$data->clusters->Description}}</td>
+                            <td>{{$data->districts->Description}}</td>
+                            <td>{{$data->mlgu->Description}}</td>
+                            <td>{{$data->barangay->Description}}</td>
                             <td>{{$data->LName}}</td>
                             <td>{{$data->FName}}</td>
                             <td>{{$data->MI}}</td>
@@ -46,13 +46,14 @@
                             <td>{{$data->Gender}}</td>
                             <td>{{$data->Weight_kg}}</td>
                             <td>{{$data->Height_cm}}</td>
-                            <td>{{@$data->bloodTypes->Description}}</td>
+                            <td>{{$data->bloodTypes->Description}}</td>
                             <td>{{$data->Contact_No}}</td>
                             <td>{{$data->House_No}}</td>
                             <td>{{$data->Street_Name}}</td>
                             <td>{{$data->Sitio}}</td>
                             <td>{{$data->Purok}}</td>
                             <td>{{$data->Barangay}}</td>
+                            <th><a href="/Data/{{$data->id}}/edit" class="btn btn-sm btn-warning">Edit</a> <a href="/Data/{{$data->id}}/delete" class="btn btn-sm btn-danger">Delete</a></th>
                         </tr>
                     @endforeach
                 </tbody>

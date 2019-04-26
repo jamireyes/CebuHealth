@@ -3,10 +3,10 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-xl-12 col-md-8">
+        <div class="col-xl-12 col-md-10">
             <h3>Accounts</h3>
             <hr>
-            <table id="DataEntryTable" class="table table-bordered data-table">
+            <table id="AccountTable" class="table table-bordered data-table">
                 <thead>
                     <tr>
                         <th>User ID</th>
@@ -15,19 +15,23 @@
                         <th>Status</th>
                         <th>Created At</th>
                         <th>Last Update</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($users as $user)
-                        <tr>
-                            <td>{{$user->id}}</td>
-                            <td>{{$user->role->Description}}</td>
-                            <td>{{$user->username}}</td>
-                            <td>{{$user->status}}</td>
-                            <td>{{$user->created_at}}</td>
-                            <td>{{$user->updated_at}}</td>
-                        </tr>
-                    @endforeach
+                    @if(count($users) > 0)
+                        @foreach($users as $user)
+                            <tr>
+                                <td>{{$user->id}}</td>
+                                <td>{{$user->role->Description}}</td>
+                                <td>{{$user->username}}</td>
+                                <td>{{$user->status}}</td>
+                                <td>{{$user->created_at}}</td>
+                                <td>{{$user->updated_at}}</td>
+                                <th><a href="/Account/{{$user->id}}/edit" class="btn btn-sm btn-warning">Edit</a> <a href="/Account/{{$user->id}}/delete" class="btn btn-sm btn-danger">Delete</a></th>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>

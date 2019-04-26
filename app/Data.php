@@ -30,31 +30,31 @@ class Data extends Model
 
     public function user()
     {
-        return $this->hasOne('App\User', 'User_ID');
+        return $this->hasOne('App\User', 'User_ID', 'User_ID');
     }
 
     public function clusters()
     {
-        return $this->hasOne('App\clusters', 'ClusterNo');
+        return $this->hasOne('App\clusters', 'ClusterNo', 'ClusterNo');
     }
 
     public function districts()
     {
-        return $this->hasOne('App\districts', 'DistrictNo');
+        return $this->hasOne('App\districts', 'DistrictNo', 'DistrictNo');
     }
 
     public function bloodTypes()
     {
-        return $this->hasOne('App\bloodTypes', 'BloodTypeID');
+        return $this->hasOne('App\bloodTypes', 'BloodTypeID', 'BloodTypeID');
     }
 
     public function barangay()
     {
-        return $this->hasOne('App\barangay', 'BarangayNo');
+        return $this->hasOne('App\barangay', 'BarangayNo', 'BarangayNo');
     }
 
     public function mlgu()
     {
-        return $this->hasOne('App\mlgu', 'mLGU_No');
+        return $this->hasOne('App\mlgu', 'mLGU_No', 'mLGU_No');
     }
 }
