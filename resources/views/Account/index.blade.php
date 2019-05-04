@@ -6,7 +6,10 @@
         <div class="col-xl-12 col-md-10">
             <h3>Accounts</h3>
             <hr>
-            <table id="AccountTable" class="table table-bordered data-table">
+            <div class="mb-2 mt-5">
+                <a class="btn btn-primary" href="{{ route('register') }}">Create Account</a>
+            </div>
+            <table id="AccountTable" class="table table-responsive data-table">
                 <thead>
                     <tr>
                         <th>User ID</th>

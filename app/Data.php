@@ -28,22 +28,24 @@ class Data extends Model
         'Barangay', 
     ];
 
+    protected $primaryKey = 'Data_ID';
+
     public function user()
     {
         return $this->hasOne('App\User', 'User_ID', 'User_ID');
     }
 
-    public function clusters()
+    public function cluster()
     {
         return $this->hasOne('App\clusters', 'ClusterNo', 'ClusterNo');
     }
 
-    public function districts()
+    public function district()
     {
         return $this->hasOne('App\districts', 'DistrictNo', 'DistrictNo');
     }
 
-    public function bloodTypes()
+    public function bloodType()
     {
         return $this->hasOne('App\bloodTypes', 'BloodTypeID', 'BloodTypeID');
     }
