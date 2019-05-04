@@ -11,6 +11,7 @@
                     <tr>
                         <th>User ID</th>
                         <th>Role</th>
+                        <th>Email</th>
                         <th>Username</th>
                         <th>Status</th>
                         <th>Created At</th>
@@ -24,6 +25,7 @@
                             <tr>
                                 <td>{{$user->id}}</td>
                                 <td>{{$user->role->Description}}</td>
+                                <td>{{$user->email}}</td>
                                 <td>{{$user->username}}</td>
                                 <td>{{$user->status}}</td>
                                 <td>{{$user->created_at}}</td>

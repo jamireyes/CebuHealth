@@ -48,7 +48,8 @@ class AccountController extends Controller
      */
     public function show($id)
     {
-        //
+        $users = User::find($id);
+        return view('Account.show', compact('users'));
     }
 
     /**
@@ -59,7 +60,9 @@ class AccountController extends Controller
      */
     public function edit($id)
     {
-        //
+        $users = User::find($id);
+        $roles = role::all();
+        return view('Account.edit', compact('users', 'roles'));
     }
 
     /**
@@ -71,7 +74,20 @@ class AccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'RoleID' => ['required'],
+        ]);
+
+        $data = User::find($id);
+        $data->email = $request->input('email');
+        $data->username = $request->input('username');
+        $data->RoleID = $request->input('RoleID');
+        $data->save();
+
+        return redirect('/Account')->with('success', 'Account Updated!');
+
     }
 
     /**
