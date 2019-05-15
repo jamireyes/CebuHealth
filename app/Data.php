@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Data extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = [
         'User_ID',
         'ClusterNo',
@@ -29,6 +32,7 @@ class Data extends Model
     ];
 
     protected $primaryKey = 'Data_ID';
+    protected $dates = ['deleted_at'];
 
     public function user()
     {

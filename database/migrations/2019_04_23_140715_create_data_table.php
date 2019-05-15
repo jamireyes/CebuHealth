@@ -34,8 +34,8 @@ class CreateDataTable extends Migration
             $table->string('Sitio')->nullable();
             $table->string('Purok')->nullable();
             $table->string('Barangay')->nullable();
-            $table->boolean('Status')->default('1');
             $table->timestamps();
+            $table->softDeletes();
 
             // Foreign Key Constraints
             $table->foreign('User_ID')->references('id')->on('users');

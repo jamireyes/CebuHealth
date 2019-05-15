@@ -98,6 +98,8 @@ class AccountController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = User::find($id);
+        $data->delete();
+        return redirect('/Account')->with('success', 'Account Removed!');
     }
 }

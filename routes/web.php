@@ -1,5 +1,7 @@
 <?php
 
+use App\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,3 +21,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('Data', 'DataController')->middleware('auth', 'user', 'admin');
 Route::resource('Account', 'AccountController')->middleware('auth', 'admin');
+
+// Route::get('/restoreAdmin', function(){
+//     $user = User::withTrashed()->where('id', 1)->restore();
+// });

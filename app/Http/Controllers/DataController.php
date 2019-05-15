@@ -92,7 +92,6 @@ class DataController extends Controller
         $data->Sitio = $request->input('Sitio');
         $data->Purok = $request->input('Purok');
         $data->Barangay = $request->input('Barangay');
-        $data->Status = 1;
         $data->save();
         
         return redirect('/')->with('success', 'Entry Added!');
@@ -191,6 +190,9 @@ class DataController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Data::find($id);
+        $data->delete();
+
+        return redirect('/Data')->with('success', 'Data Entry Removed!');
     }
 }

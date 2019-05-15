@@ -6,7 +6,7 @@
         <div class="col-xl-12 col-md-10">
             <h3>Data Entry</h3>
             <hr>
-            <table id="DataEntryTable" class="table table-responsive data-table">
+            <table id="DataEntryTable" class="table table-responsive data-table mt-5">
                 <thead>
                     <tr>
                         <th>User ID</th>
@@ -53,11 +53,18 @@
                             <td>{{$data->Sitio}}</td>
                             <td>{{$data->Purok}}</td>
                             <td>{{$data->Barangay}}</td>
-                            <th><a href="/Data/{{$data->Data_ID}}/edit" class="btn btn-sm btn-warning">Edit</a> <a href="/Data/{{$data->Data_ID}}/delete" class="btn btn-sm btn-danger">Delete</a></th>
+                            <th>
+                                <a href="/Data/{{$data->Data_ID}}/edit" class="btn btn-sm btn-warning">Edit</a>
+                                {!!Form::open(['action' => ['DataController@destroy', $data->Data_ID], 'method' => 'POST'])!!}
+                                    {{Form::hidden('_method', 'DELETE')}}
+                                    {{Form::submit('Delete', ['class' => 'btn btn-sm btn-danger'])}}
+                                {!!Form::close()!!}
+                            </th>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <a href="{{route('Data.create')}}" class="btn btn-primary">Add Entry</a>
         </div>
     </div>
 </div>
