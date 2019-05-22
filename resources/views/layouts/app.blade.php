@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ asset('js/custom.js') }}" defer></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -19,7 +19,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link type="text/css" href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">
@@ -94,5 +96,19 @@
             @yield('content')
         </main>
     </div>
+    <script>
+        $(document).ready(function(){
+            $('#AccountTable').DataTable();
+            $('#DataEntryTable').DataTable();
+        });
+
+        $('#AccountTable').DataTable( {
+            "searching": true
+        } );
+
+        $('#DataEntryTable').DataTable( {
+            "searching": true
+        } );
+    </script>
 </body>
 </html>

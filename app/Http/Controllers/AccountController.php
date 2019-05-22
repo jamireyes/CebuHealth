@@ -15,8 +15,9 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('Account.index', compact('users'));
+        $users = User::withTrashed()->get();
+        $roles = role::all();
+        return view('Account.index', compact('users', 'roles'));
     }
 
     /**
