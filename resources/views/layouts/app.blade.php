@@ -3,22 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Cebu Health') }}</title>
 
-    <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    
 
-    <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" rel="stylesheet">
 
@@ -104,16 +96,21 @@
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 <script>
     $(document).ready(function(){
-        $('#AccountTable').DataTable();
+        $('#AccountTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route('getUsers') }}',
+            columns: [
+                { data: 'id', name: 'id'},
+                { data: 'role', name: 'role'},
+                { data: 'email', name: 'email'},
+                { data: 'username', name: 'username'},
+                { data: 'created_at', name: 'created_at'},
+                { data: 'updated_at', name: 'updated_at'},
+                { data: 'deleted_at', name: 'deleted_at'}
+            ]
+        });
         $('#DataEntryTable').DataTable();
     });
-
-    // $('#AccountTable').DataTable( {
-    //     "searching": true
-    // } );
-
-    // $('#DataEntryTable').DataTable( {
-    //     "searching": true
-    // } );
 </script>
 </html>

@@ -20,7 +20,9 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('Data', 'DataController')->middleware('auth', 'user', 'admin');
+Route::get('Account', 'AccountController@getUsers')->name('getUsers')->middleware('auth', 'admin');
 Route::resource('Account', 'AccountController')->middleware('auth', 'admin');
+
 
 // Route::get('/restoreAdmin', function(){
 //     $user = User::withTrashed()->where('id', 1)->restore();

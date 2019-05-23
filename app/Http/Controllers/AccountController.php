@@ -15,14 +15,15 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $users = User::withTrashed()->get();
-        while($users > 0){
-            if($users->deleted_at != null){
-                $user
-            }
-        }
-        $roles = role::all();
-        return view('Account.index', compact('users', 'roles'));
+        // $users = User::withTrashed()->get();
+        // $roles = role::all();
+        // return view('Account.index', compact('users', 'roles'));
+        return view('Account.index');
+    }
+
+    public function getUsers()
+    {
+        return Datatables::of(User::query()->make(true));
     }
 
     /**

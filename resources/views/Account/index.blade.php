@@ -22,7 +22,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody>
                             @if(count($users) > 0)
                                 @foreach($users as $user)
                                     <tr>
@@ -44,14 +44,14 @@
                                     </tr>
                                 @endforeach
                             @endif
-                        </tbody>
+                        </tbody> --}}
                     </table>
                 </div>
             </div>
             <a class="btn btn-primary" href="{{ route('register') }}">Register</a>
         </div>
     </div>
-    @include('Account.delete')
-    @include('Account.edit')
+    {{-- @include('Account.delete')
+    @include('Account.edit') --}}
 </div>
 @endsection
