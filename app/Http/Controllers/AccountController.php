@@ -16,6 +16,11 @@ class AccountController extends Controller
     public function index()
     {
         $users = User::withTrashed()->get();
+        while($users > 0){
+            if($users->deleted_at != null){
+                $user
+            }
+        }
         $roles = role::all();
         return view('Account.index', compact('users', 'roles'));
     }

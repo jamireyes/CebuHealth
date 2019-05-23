@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -19,8 +19,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Styles -->
-    <link type="text/css" href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" rel="stylesheet">
 
 </head>
 <body>
@@ -96,19 +96,24 @@
             @yield('content')
         </main>
     </div>
-    <script>
-        $(document).ready(function(){
-            $('#AccountTable').DataTable();
-            $('#DataEntryTable').DataTable();
-        });
-
-        $('#AccountTable').DataTable( {
-            "searching": true
-        } );
-
-        $('#DataEntryTable').DataTable( {
-            "searching": true
-        } );
-    </script>
 </body>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#AccountTable').DataTable();
+        $('#DataEntryTable').DataTable();
+    });
+
+    // $('#AccountTable').DataTable( {
+    //     "searching": true
+    // } );
+
+    // $('#DataEntryTable').DataTable( {
+    //     "searching": true
+    // } );
+</script>
 </html>
