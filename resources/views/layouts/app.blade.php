@@ -6,111 +6,142 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Cebu Health') }}</title>
-
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" rel="stylesheet">
+    
+    <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
 </head>
+
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark bg-custom">
-            <div class="container col-xl-10">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Cebu Health') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        @if (Auth::check())
-                            @if(Auth::user()->RoleID == 1)
-                                <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('Account.index') }}">Account</a>
-                                    </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('Data.index')}}">Data Entry</a>
-                                </li>
-                            @elseif(Auth::user()->RoleID == 0)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('/') }}">Home</a>
-                                </li>
-                            @endif
-                        @endif
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @if(Auth::check()) 
-                            @if (Auth::user()->RoleID == 1)
-                                @if (Route::has('register'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                    </li>
-                                @endif
-                            @endif
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->username }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endif
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
+        @include('include.navbar');
+        <div class="container">
             @yield('content')
-        </main>
+        </div>
     </div>
 </body>
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script src="{{ mix('js/app.js') }}"></script>
 <script>
     $(document).ready(function(){
-        $('#AccountTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '{{ route('getUsers') }}',
-            columns: [
-                { data: 'id', name: 'id'},
-                { data: 'role', name: 'role'},
-                { data: 'email', name: 'email'},
-                { data: 'username', name: 'username'},
-                { data: 'created_at', name: 'created_at'},
-                { data: 'updated_at', name: 'updated_at'},
-                { data: 'deleted_at', name: 'deleted_at'}
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var AccountTable = $('#AccountTable').DataTable({
+            "scrollX": true,
+            "columnDefs": [
+                {"className": "text-center", "targets": [0]}
             ]
         });
-        $('#DataEntryTable').DataTable();
+        var DataEntryTable = $('#DataEntryTable').DataTable({
+            "scrollX": true,
+            "columnDefs": [
+                {"className": "text-center", "targets": [0]}
+            ]
+        });
+
+        // Account Buttons
+        AccountTable.on('click', '#EditAccountBtn', function(){
+            var user = $(this).data('user');
+            var route = "{{route('Account.update', '')}}/"+user.id;
+            $('#editForm').attr('action', route);
+            $('#email').val(user.email);
+            $('#username').val(user.username);
+            $('#RoleID').val(user.RoleID);
+        });
+        AccountTable.on('click', '#DeleteAccountBtn', function(){
+            var id = $(this).data('id');
+            var username = $(this).data('username');
+            var route = "{{ route('Account.destroy', '')}}/"+id;
+            $('#deleteForm').attr('action', route);
+            $('p').append(" <h3 class='text-center'><strong>"+username+"</strong></h3>");
+            $('#DeleteAccount').on('hide.bs.modal', function(){
+                $('strong').remove();
+            });
+        });
+        AccountTable.on('click', '#RestoreAccountBtn', function(){
+            var id = $(this).data('id');
+            var username = $(this).data('username');
+            var route = "Account/"+id+"/restore";
+            $('#restoreForm').attr('action', route);
+            $('p').append(" <h3 class='text-center'><strong>"+username+"</strong></h3>");
+            $('#RestoreAccount').on('hide.bs.modal', function(){
+                $('strong').remove();
+            });
+        });
+
+        // Data Entry Buttons
+        DataEntryTable.on('click', '#EditEntryBtn', function(){
+            var data = $(this).data('data');
+            console.log(data);
+            var route = "{{ route('Data.update', '')}}/"+data.Data_ID;
+            $('#editEntryForm').attr('action', route);
+            $('#ClusterNo').val(data.ClusterNo);
+            $('#DistrictNo').val(data.DistrictNo);
+            $('#mLGU_No').val(data.mLGU_No);
+            $('#BarangayNo').val(data.BarangayNo);
+            $('#LName').val(data.LName);
+            $('#FName').val(data.FName);
+            $('#MI').val(data.MI);
+            $('#Birthdate').val(data.Birthdate);
+            $('#Gender').val(data.Gender);
+            $('#Weight_kg').val(data.Weight_kg);
+            $('#Height_cm').val(data.Height_cm);
+            $('#BloodTypeID').val(data.BloodTypeID);
+            $('#Contact_No').val(data.Contact_No);
+            $('#House_No').val(data.House_No);
+            $('#Street_Name').val(data.Street_Name);
+            $('#Sitio').val(data.Sitio);
+            $('#Purok').val(data.Purok);
+            $('#Barangay').val(data.Barangay);
+        });
+        DataEntryTable.on('click', '#DeleteEntryBtn', function(){
+            var id = $(this).data('id');
+            var route = "{{ route('Data.destroy', '')}}/"+id;
+            $('#deleteEntryForm').attr('action', route);
+        });
+        DataEntryTable.on('click', '#RestoreEntryBtn', function(){
+            var id = $(this).data('id');
+            var route = "Data/"+id+"/restore";
+            $('#restoreEntryForm').attr('action', route);
+        });
+
+        // var UserID = [];
+        
+        AccountTable.on('search.dt', function(){
+            length = AccountTable.rows({ filter : 'applied' }).nodes().length;
+            array = AccountTable.rows({ filter : 'applied' }).data();
+            for(x = 0; x < length; x++){
+                UserID[x] = parseInt(array[x][1], 10);
+            }
+            console.log('Length:'+length);
+            console.log(UserID);
+        });
+
+        $('#ExportAccount').click(function(){
+            if(UserID.length == 0){
+
+            }
+        });
+
+        $('#ExportAccount').click(function(){
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('Account.export') }}",
+                data: { data: UserID },
+                success: function(response){
+                    if(data == "success") {
+                        alert("Successful!");
+                    }else{
+                        alert("Unsuccessful!");
+                    }
+                },
+            });
+        });
     });
 </script>
 </html>

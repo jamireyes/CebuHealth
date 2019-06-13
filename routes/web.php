@@ -18,12 +18,21 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('Data', 'DataController')->middleware('auth', 'user', 'admin');
-Route::get('Account', 'AccountController@getUsers')->name('getUsers')->middleware('auth', 'admin');
-Route::resource('Account', 'AccountController')->middleware('auth', 'admin');
+Route::get('dashboard', 'DashboardController@index')->name('Dashboard');
 
+// DataController
+Route::get('Data/export', 'DataController@export')->name('Data.export')->middleware(['auth', 'admin']);
+Route::post('Data/{Data}/restore', 'DataController@restore')->name('Data.restore');
+Route::get('Data/create', 'DataController@create')->name('Data.create')->middleware(['auth']);
+Route::post('Data', 'DataController@store')->name('Data.store')->middleware(['auth', 'admin']);
+Route::get('Data', 'DataController@index')->name('Data.index')->middleware(['auth', 'admin']);
+Route::get('Data/{Data}', 'DataController@show')->name('Data.show')->middleware(['auth', 'admin']);
+Route::put('Data/{Data}', 'DataController@update')->name('Data.update')->middleware(['auth', 'admin']);
+Route::delete('Data/{Data}', 'DataController@destroy')->name('Data.destroy')->middleware(['auth', 'admin']);
+Route::get('Data/{Data}/edit', 'DataController@edit')->name('Data.edit')->middleware(['auth', 'admin']);
 
-// Route::get('/restoreAdmin', function(){
-//     $user = User::withTrashed()->where('id', 1)->restore();
-// });
+// AccountController
+Route::post('Account/export', 'AccountController@export')->name('Account.export')->middleware(['auth', 'admin']);
+Route::post('Account/{Account}/restore', 'AccountController@restore')->name('Account.restore');
+Route::resource('Account', 'AccountController');
+

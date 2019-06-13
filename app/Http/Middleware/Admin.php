@@ -16,9 +16,11 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->RoleID == '1') {
-            return $next($request);
+        if (Auth::check()) {
+            if (Auth::user()->RoleID == 1) {
+                return $next($request);
+            } 
+            return redirect('/Data/create');
         }
-        return redirect('/Data/create');
     }
 }

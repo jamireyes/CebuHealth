@@ -22,13 +22,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -45,11 +38,13 @@ class LoginController extends Controller
 
     protected function redirectTo( ) 
     {
-        if (Auth::check() && Auth::user()->RoleID == 1) {
-            return '/home';
+        if (Auth::check()) {
+            if (Auth::user()->RoleID == 1) {
+                return '/dashboard';
+            } elseif (Auth::user()->RoleID == 0) {
+                return '/Data/create';
+            }
         }
-        elseif (Auth::check() && Auth::user()->RoleID == 0) {
-            return '/Data/create';
-        }
+        
     }
 }

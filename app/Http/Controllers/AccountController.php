@@ -3,11 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 use App\User;
 use App\role;
+use DataTables;
 
 class AccountController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('admin');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -15,36 +26,9 @@ class AccountController extends Controller
      */
     public function index()
     {
-        // $users = User::withTrashed()->get();
-        // $roles = role::all();
-        // return view('Account.index', compact('users', 'roles'));
-        return view('Account.index');
-    }
-
-    public function getUsers()
-    {
-        return Datatables::of(User::query()->make(true));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        $users = User::withTrashed()->get();
+        $roles = role::all();
+        return view('Account.index', compact('users', 'roles'));
     }
 
     /**
@@ -55,8 +39,8 @@ class AccountController extends Controller
      */
     public function show($id)
     {
-        $users = User::find($id);
-        return view('Account.show', compact('users'));
+        $user = User::find($id);
+        return view('Account.edit', compact('user'));
     }
 
     /**
@@ -67,9 +51,7 @@ class AccountController extends Controller
      */
     public function edit($id)
     {
-        $users = User::find($id);
-        $roles = role::all();
-        return view('Account.edit', compact('users', 'roles'));
+
     }
 
     /**
@@ -81,11 +63,11 @@ class AccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'RoleID' => ['required'],
-        ]);
+        $this->validate($request, array(
+            'email' => 'required|string|email|max:255',
+            'username' => 'required|string|max:255',
+            'RoleID' => 'required',
+        ));
 
         $data = User::find($id);
         $data->email = $request->input('email');
@@ -105,8 +87,19 @@ class AccountController extends Controller
      */
     public function destroy($id)
     {
-        $data = User::find($id);
-        $data->delete();
+        $user = User::find($id)->delete();
         return redirect('/Account')->with('success', 'Account Removed!');
+    }
+
+    public function restore($id)
+    {
+        $user = User::withTrashed()->find($id)->restore();
+        return redirect('/Account')->with('success', 'Account Restored!');
+    }
+
+    public function export(Request $request)
+    {
+        $users = $request->input('data');
+        //return Excel::download((new UsersExport)->setUsers($users), 'users.xlsx');
     }
 }

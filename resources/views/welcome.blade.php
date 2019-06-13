@@ -9,12 +9,13 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
 
         <!-- Styles -->
         <style>
             html, body {
                 background-color: #fff;
-                color: #636b6f;
+                color: #fff;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
                 height: 100vh;
@@ -50,7 +51,7 @@
             }
 
             .links > a {
-                color: #636b6f;
+                color: #fff;
                 padding: 0 25px;
                 font-size: 13px;
                 font-weight: 600;
@@ -64,12 +65,16 @@
             }
         </style>
     </head>
-    <body>
+    <body class="bg-welcome">
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        @if(Auth::user()->RoleID == 1)
+                            <a href="{{ route('Dashboard') }}">Dashboard</a>
+                        @elseif(Auth::user()->RoleID == 2)
+                            <a href="{{ route('Data.create') }}">Add Entry</a>
+                        @endif
                     @else
                         <a href="{{ route('login') }}">Login</a>
                     @endauth

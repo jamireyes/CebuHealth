@@ -15,25 +15,25 @@ class CreateDataTable extends Migration
     {
         Schema::create('data', function (Blueprint $table) {
             $table->bigIncrements('Data_ID');
-            $table->bigInteger('User_ID')->nullable();
-            $table->bigInteger('ClusterNo')->nullable();
-            $table->bigInteger('DistrictNo')->nullable();
-            $table->bigInteger('mLGU_No')->nullable();
-            $table->bigInteger('BarangayNo')->nullable();
-            $table->string('LName')->nullable();
-            $table->string('FName')->nullable();
-            $table->string('MI')->nullable();
-            $table->date('Birthdate')->nullable();
-            $table->boolean('Gender')->nullable();
-            $table->unsignedTinyInteger('Weight_kg')->nullable();
-            $table->unsignedTinyInteger('Height_cm')->nullable();
-            $table->bigInteger('BloodTypeID')->nullable();
-            $table->bigInteger('Contact_No')->nullable();
-            $table->string('House_No')->nullable();
-            $table->string('Street_Name')->nullable();
-            $table->string('Sitio')->nullable();
-            $table->string('Purok')->nullable();
-            $table->string('Barangay')->nullable();
+            $table->bigInteger('User_ID');
+            $table->bigInteger('ClusterNo');
+            $table->bigInteger('DistrictNo');
+            $table->bigInteger('mLGU_No');
+            $table->bigInteger('BarangayNo');
+            $table->string('LName');
+            $table->string('FName');
+            $table->string('MI');
+            $table->date('Birthdate');
+            $table->boolean('Gender');
+            $table->unsignedTinyInteger('Weight_kg');
+            $table->unsignedTinyInteger('Height_cm');
+            $table->bigInteger('BloodTypeID');
+            $table->bigInteger('Contact_No');
+            $table->string('House_No');
+            $table->string('Street_Name');
+            $table->string('Sitio');
+            $table->string('Purok');
+            $table->string('Barangay');
             $table->timestamps();
             $table->softDeletes();
 

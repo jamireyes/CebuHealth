@@ -4,11 +4,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-xl-6 col-md-10">
-            @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
-                </div>
-            @endif
             @include('include.message')
             {!! Form::open(['action' => 'DataController@store', 'method' => 'POST', 'autocomplete' => 'no']) !!}
                 @csrf

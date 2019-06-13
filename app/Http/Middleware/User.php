@@ -16,9 +16,11 @@ class User
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::check() && Auth::user()->RoleID == '0') {
-            return $next($request);
+        if (Auth::check()) {
+            if (Auth::user()->RoleID == 2) {
+                return $next($request);
+            }
+            return redirect('/dashboard');
         }
-        return redirect('/home');
     }
 }

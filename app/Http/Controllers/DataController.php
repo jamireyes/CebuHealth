@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exports\DataExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\barangay;
 use App\bloodTypes;
 use App\clusters;
@@ -15,6 +17,10 @@ use Auth;
 
 class DataController extends Controller
 {
+    public function __construct()
+    {
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -22,9 +28,14 @@ class DataController extends Controller
      */
     public function index()
     {
-        $datas = Data::all();
+        $datas = Data::withTrashed()->get();
+        $barangays = barangay::all();
+        $bloodtypes = bloodTypes::all();
+        $clusters = clusters::all();
+        $districts = districts::all();
+        $mlgus = mlgu::all();
 
-        return view('Data.index', compact('datas'));
+        return view('Data.index', compact('datas', 'barangays', 'bloodtypes', 'clusters', 'districts', 'mlgus'));
     }
 
     /**
@@ -94,7 +105,7 @@ class DataController extends Controller
         $data->Barangay = $request->input('Barangay');
         $data->save();
         
-        return redirect('/')->with('success', 'Entry Added!');
+        return (Auth::user()->RoleID == 1) ? redirect('/Data')->with('success', 'Entry Added!') : redirect('/Data/create')->with('success', 'Entry Added!');
     }
 
     /**
@@ -176,10 +187,9 @@ class DataController extends Controller
         $data->Sitio = $request->input('Sitio');
         $data->Purok = $request->input('Purok');
         $data->Barangay = $request->input('Barangay');
-        $data->Status = 1;
         $data->save();
         
-        return redirect('/Data')->with('success', 'Entry Updated!');
+        return redirect('/Data')->with('success', 'Entry Updated!')->with('success', 'Entry Updated!');
     }
 
     /**
@@ -190,9 +200,18 @@ class DataController extends Controller
      */
     public function destroy($id)
     {
-        $data = Data::find($id);
-        $data->delete();
+        $data = Data::find($id)->delete();
+        return redirect('/Data')->with('success', 'Entry Removed!');
+    }
 
-        return redirect('/Data')->with('success', 'Data Entry Removed!');
+    public function restore($id)
+    {
+        $data = Data::withTrashed()->find($id)->restore();
+        return redirect('/Data')->with('success', 'Entry Restored!');
+    }
+
+    public function export()
+    {
+        return Excel::download(new DataExport, 'Data_Entry.xlsx');
     }
 }

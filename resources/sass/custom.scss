@@ -1,0 +1,46 @@
+.custom-nav {
+    background-color: #0D1F58;
+}
+
+.bg-welcome {
+    background: rgba(34,55,117,1);
+    background: -moz-radial-gradient(center, ellipse cover, rgba(34,55,117,1) 0%, rgba(13,31,88,1) 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(34,55,117,1)), color-stop(100%, rgba(13,31,88,1)));
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(34,55,117,1) 0%, rgba(13,31,88,1) 100%);
+    background: -o-radial-gradient(center, ellipse cover, rgba(34,55,117,1) 0%, rgba(13,31,88,1) 100%);
+    background: -ms-radial-gradient(center, ellipse cover, rgba(34,55,117,1) 0%, rgba(13,31,88,1) 100%);
+    background: radial-gradient(ellipse at center, rgba(34,55,117,1) 0%, rgba(13,31,88,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#223775', endColorstr='#0d1f58', GradientType=1 );
+}
+
+.warning {
+    color: #ffed4a;
+}
+
+.warning:hover {
+    color: #ffe924;
+}
+
+.danger {
+    color: #e3342f;
+}
+
+.danger:hover {
+    color: #d0211c;
+}
+
+.primary {
+    color: #3490dc;
+}
+
+.primary:hover {
+    color: #227dc7;
+}
+
+.success {
+    color: #38c172;
+}
+
+.success:hover {
+    color: #2fa360;
+}

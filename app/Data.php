@@ -63,4 +63,9 @@ class Data extends Model
     {
         return $this->hasOne('App\mlgu', 'mLGU_No', 'mLGU_No');
     }
+
+    public function gender()
+    {
+        return $this->hasOne('App\Gender', 'Gender', 'Gender');
+    }
 }

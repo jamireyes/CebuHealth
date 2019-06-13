@@ -1,4 +1,3 @@
-
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
@@ -9,6 +8,5 @@
 @import '~bootstrap/scss/bootstrap';
 @import '~datatables.net-bs4/css/dataTables.bootstrap4.css';
 
-.bg-custom {
-  background-color: #273E78;
-}
+// Custom CSS
+@import 'custom';
