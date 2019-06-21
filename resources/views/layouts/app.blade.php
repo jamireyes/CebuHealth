@@ -14,8 +14,8 @@
 
 <body>
     <div id="app">
-        @include('include.navbar');
-        <div class="container">
+        @include('include.navbar')
+        <div class="container py-4">
             @yield('content')
         </div>
     </div>
@@ -23,7 +23,7 @@
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-<script src="{{ mix('js/app.js') }}"></script>
+<script src="{{ mix('js/app.js') }}" defer></script>
 <script>
     $(document).ready(function(){
         $.ajaxSetup({
@@ -39,15 +39,19 @@
         });
         var DataEntryTable = $('#DataEntryTable').DataTable({
             "scrollX": true,
+            "autoWidth": true,
             "columnDefs": [
                 {"className": "text-center", "targets": [0]}
             ]
         });
+        
+        DataEntryTable.columns.adjust().draw();
 
         // Account Buttons
         AccountTable.on('click', '#EditAccountBtn', function(){
             var user = $(this).data('user');
             var route = "{{route('Account.update', '')}}/"+user.id;
+            console.log(route);
             $('#editForm').attr('action', route);
             $('#email').val(user.email);
             $('#username').val(user.username);
@@ -109,39 +113,71 @@
             var route = "Data/"+id+"/restore";
             $('#restoreEntryForm').attr('action', route);
         });
-
-        // var UserID = [];
         
+        var UserID = [];
+
         AccountTable.on('search.dt', function(){
-            length = AccountTable.rows({ filter : 'applied' }).nodes().length;
+            index = AccountTable.rows({ filter : 'applied' }).nodes().length;
             array = AccountTable.rows({ filter : 'applied' }).data();
-            for(x = 0; x < length; x++){
+            for(x = 0; x < index; x++){
                 UserID[x] = parseInt(array[x][1], 10);
             }
-            console.log('Length:'+length);
-            console.log(UserID);
+            UserID.length = index--;
         });
 
-        $('#ExportAccount').click(function(){
-            if(UserID.length == 0){
-
+        $('#ExportSearch').click(function(){
+            console.log('Searched: ' + UserID);
+            if(UserID.length > 0){
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ route('Account.exportSearch') }}",
+                    data: { 
+                        "_token": "{{ csrf_token() }}",
+                        data: UserID
+                    },
+                    success: function(response){
+                        window.location.href = this.url;
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert('ERROR: ' + errorThrown);
+                    }
+                });
             }
         });
 
-        $('#ExportAccount').click(function(){
-            $.ajax({
-                type: 'POST',
-                url: "{{ route('Account.export') }}",
-                data: { data: UserID },
-                success: function(response){
-                    if(data == "success") {
-                        alert("Successful!");
-                    }else{
-                        alert("Unsuccessful!");
-                    }
-                },
-            });
+        var DataID = [];
+
+        DataEntryTable.on('search.dt', function(){
+            index = DataEntryTable.rows({ filter : 'applied' }).nodes().length;
+            array = DataEntryTable.rows({ filter : 'applied' }).data();
+            for(x = 0; x < index; x++){
+                DataID[x] = parseInt(array[x][1]);
+            }
+            DataID.length = index--;
+            console.log(DataID);
+
         });
+
+        $('#ExportSearchEntry').click(function(){
+            console.log('Searched: ' + DataID);
+            if(DataID.length > 0){
+                $.ajax({
+                    type: 'GET',
+                    url: "{{ route('Data.exportSearch') }}",
+                    data: { 
+                        "_token": "{{ csrf_token() }}",
+                        data: DataID
+                    },
+                    success: function(response){
+                        window.location.href = this.url;
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        alert('ERROR: ' + errorThrown);
+                    }
+                });
+            }
+        });
+
     });
 </script>
 </html>

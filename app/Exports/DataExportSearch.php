@@ -4,22 +4,25 @@ namespace App\Exports;
 
 use App\Data;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\BeforeExport;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class DataExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithEvents
+class DataExportSearch implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithEvents
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+    public function setData($data)
+    {
+        $this->data = $data;
+        return $this;
+    }
+
     public function collection()
     {
-        return Data::withTrashed()->with('user', 'cluster', 'district', 'mlgu', 'barangay', 'bloodType')->get();
+        return (sizeof($this->data) > 1) ? Data::withTrashed()->with('user', 'cluster', 'district', 'mlgu', 'barangay', 'bloodType')->whereIn('Data_ID', $this->data)->get() : Data::withTrashed()->with('user', 'cluster', 'district', 'mlgu', 'barangay', 'bloodType')->where('Data_ID', $this->data)->get();
     }
 
     public function headings(): array
@@ -63,7 +66,7 @@ class DataExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMa
             $data->FName,
             $data->MI,
             $data->Birthdate,
-            $data->Gender ? 'Male' : 'Female',
+            $data->Gender,
             $data->Weight_kg,
             $data->Height_cm,
             $data->bloodtype->Description,

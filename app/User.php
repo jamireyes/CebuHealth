@@ -42,6 +42,7 @@ class User extends Authenticatable
     protected $table = 'Users';
     public $primarykey = 'id';
     protected $dates = ['deleted_at'];
+    protected $with = ['role'];
 
     public function role()
     {

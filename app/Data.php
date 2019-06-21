@@ -33,10 +33,11 @@ class Data extends Model
 
     protected $primaryKey = 'Data_ID';
     protected $dates = ['deleted_at'];
+    protected $with = ['user', 'cluster', 'district', 'bloodType', 'barangay', 'mlgu'];
 
     public function user()
     {
-        return $this->hasOne('App\User', 'User_ID', 'User_ID');
+        return $this->hasOne('App\User', 'id', 'id');
     }
 
     public function cluster()
@@ -62,10 +63,5 @@ class Data extends Model
     public function mlgu()
     {
         return $this->hasOne('App\mlgu', 'mLGU_No', 'mLGU_No');
-    }
-
-    public function gender()
-    {
-        return $this->hasOne('App\Gender', 'Gender', 'Gender');
     }
 }

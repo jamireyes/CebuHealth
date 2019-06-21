@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exports\UsersExportSearch;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
@@ -41,17 +42,6 @@ class AccountController extends Controller
     {
         $user = User::find($id);
         return view('Account.edit', compact('user'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-
     }
 
     /**
@@ -97,9 +87,20 @@ class AccountController extends Controller
         return redirect('/Account')->with('success', 'Account Restored!');
     }
 
-    public function export(Request $request)
+    public function exportAll()
     {
-        $users = $request->input('data');
-        //return Excel::download((new UsersExport)->setUsers($users), 'users.xlsx');
+        return Excel::download(new UsersExport, 'User_All.xlsx');
+    }
+
+    public function exportSearch(Request $request)
+    {
+        $users = $request->get('data');
+        foreach($users as $user){
+            $data[] = (int)$user;
+        }
+        $UsersExportSearch = new UsersExportSearch;
+        $UsersExportSearch->setUsers($data);
+
+        return Excel::download($UsersExportSearch, 'User_Searched.xlsx');
     }
 }

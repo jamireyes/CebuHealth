@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Exports\DataExport;
+use App\Exports\DataExportSearch;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 use App\barangay;
 use App\bloodTypes;
 use App\clusters;
@@ -12,7 +15,6 @@ use App\districts;
 use App\mlgu;
 use App\Data;
 use Datatables;
-use DB;
 use Auth;
 
 class DataController extends Controller
@@ -210,8 +212,20 @@ class DataController extends Controller
         return redirect('/Data')->with('success', 'Entry Restored!');
     }
 
-    public function export()
+    public function exportAll()
     {
-        return Excel::download(new DataExport, 'Data_Entry.xlsx');
+        return Excel::download(new DataExport, 'Data_All.xlsx');
+    }
+
+    public function exportSearch(Request $request)
+    {
+        $ex = $request->get('data');
+        foreach($ex as $x){
+            $array[] = (int)$x;
+        }
+        $DataExportSearch = new DataExportSearch;
+        $DataExportSearch->setData($array);
+
+        return Excel::download($DataExportSearch, 'Data_Searched.xlsx');
     }
 }

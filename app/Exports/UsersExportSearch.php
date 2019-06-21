@@ -5,19 +5,25 @@ namespace App\Exports;
 use App\User;
 use App\role;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\BeforeExport;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithEvents
-{
+class UsersExportSearch implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithEvents
+{    
+    public function setUsers($users)
+    {
+        $this->users = $users;
+        return $this;
+    }
+    
     public function collection()
-    { 
-        return User::withTrashed()->with('role')->get();
+    {
+        return (sizeof($this->users) > 1) ? User::withTrashed()->with('role')->whereIn('id', $this->users)->get() : User::withTrashed()->with('role')->where('id', $this->users)->get();
     }
 
     public function headings(): array

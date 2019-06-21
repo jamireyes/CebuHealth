@@ -21,7 +21,8 @@ Auth::routes();
 Route::get('dashboard', 'DashboardController@index')->name('Dashboard');
 
 // DataController
-Route::get('Data/export', 'DataController@export')->name('Data.export')->middleware(['auth', 'admin']);
+Route::get('Data/exportAll', 'DataController@exportAll')->name('Data.exportAll')->middleware(['auth', 'admin']);
+Route::get('Data/exportSearch', 'DataController@exportSearch')->name('Data.exportSearch')->middleware(['auth', 'admin']);
 Route::post('Data/{Data}/restore', 'DataController@restore')->name('Data.restore');
 Route::get('Data/create', 'DataController@create')->name('Data.create')->middleware(['auth']);
 Route::post('Data', 'DataController@store')->name('Data.store')->middleware(['auth', 'admin']);
@@ -32,7 +33,8 @@ Route::delete('Data/{Data}', 'DataController@destroy')->name('Data.destroy')->mi
 Route::get('Data/{Data}/edit', 'DataController@edit')->name('Data.edit')->middleware(['auth', 'admin']);
 
 // AccountController
-Route::post('Account/export', 'AccountController@export')->name('Account.export')->middleware(['auth', 'admin']);
+Route::get('Account/exportAll', 'AccountController@exportAll')->name('Account.exportAll')->middleware(['auth', 'admin']);
+Route::get('Account/exportSearch', 'AccountController@exportSearch')->name('Account.exportSearch')->middleware(['auth', 'admin']);
 Route::post('Account/{Account}/restore', 'AccountController@restore')->name('Account.restore');
 Route::resource('Account', 'AccountController');
 

@@ -44,7 +44,6 @@ class LoginController extends Controller
             } elseif (Auth::user()->RoleID == 0) {
                 return '/Data/create';
             }
-        }
-        
+        }        
     }
 }

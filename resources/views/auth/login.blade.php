@@ -10,26 +10,26 @@
                     @csrf
                     
                     <div class="form-group row">
-                        <label for="email" class="col-md-4 col-form-label text-md-right">Username</label>
+                        <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
                         <div class="col-md-6">
-                            <input id="username" type="text" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
-                            @if ($errors->has('username'))
+                            <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                            @error('username')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('username') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                 </span>
-                            @endif
+                            @enderror
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
+                        <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
                         <div class="col-md-6">
-                            <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required autocomplete="current-password">
-                            @if ($errors->has('password'))
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                            @error('password')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('password') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                 </span>
-                            @endif
+                            @enderror
                         </div>
                     </div>
 

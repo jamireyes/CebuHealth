@@ -5,9 +5,10 @@
 <div class="card">
     <div class="card-header">
         <div class="d-flex">
-            <div class="mr-auto p-2">Data Entry</div>
-            <div class="p-2"><a href="{{route('Data.create')}}" class="btn btn-sm btn-primary">Add Entry</a></div>
-            <div class="p-2"><a href="{{route('Data.export')}}" class="btn btn-sm btn-success">Export</a></div>
+            <div class="mr-auto p-1">Data Entry</div>
+            <div class="p-1"><a href="{{ route('Data.create') }}" class="btn btn-sm btn-primary">Add Entry</a></div>
+            <div class="p-1"><a href="{{ route('Data.exportAll') }}" class="btn btn-sm btn-success">Export All</a></div>
+            <div class="p-1"><button id="ExportSearchEntry" href="{{ route('Data.exportSearch') }}" class="btn btn-sm btn-success">Export Searched</button></div>
         </div>
     </div>
     <div class="card-body">
@@ -15,8 +16,8 @@
             <thead>
                 <tr>
                     <th>Status</th>
-                    <th>User ID</th>
                     <th>Data ID</th>
+                    <th>User ID</th>
                     <th>Cluster</th>
                     <th>District</th>
                     <th>mLGU</th>
@@ -50,8 +51,8 @@
                                 <i class="fas fa-circle danger"></i>
                             @endif
                         </td>
-                        <td>{{$data->User_ID}}</td>
                         <td>{{$data->Data_ID}}</td>
+                        <td>{{$data->User_ID}}</td>
                         <td>{{$data->cluster->Description}}</td>
                         <td>{{$data->district->Description}}</td>
                         <td>{{$data->mlgu->Description}}</td>
