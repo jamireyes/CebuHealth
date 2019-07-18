@@ -38,7 +38,7 @@ class CreateDataTable extends Migration
             $table->softDeletes();
 
             // Foreign Key Constraints
-            $table->foreign('User_ID')->references('id')->on('users');
+            $table->foreign('User_ID')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -13,28 +13,35 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+Route::get('/', '\App\Http\Controllers\Auth\LoginController@showLoginForm');
 Auth::routes();
-Route::get('dashboard', 'DashboardController@index')->name('Dashboard');
+
+// DashboardController
+Route::get('Dashboard', 'DashboardController@index')->name('Dashboard');
+Route::get('ClusterChart', 'DashboardController@ClusterChart')->name('ClusterChart');
+Route::get('DistrictChart', 'DashboardController@DistrictChart')->name('DistrictChart');
 
 // DataController
 Route::get('Data/exportAll', 'DataController@exportAll')->name('Data.exportAll')->middleware(['auth', 'admin']);
 Route::get('Data/exportSearch', 'DataController@exportSearch')->name('Data.exportSearch')->middleware(['auth', 'admin']);
 Route::post('Data/{Data}/restore', 'DataController@restore')->name('Data.restore');
 Route::get('Data/create', 'DataController@create')->name('Data.create')->middleware(['auth']);
-Route::post('Data', 'DataController@store')->name('Data.store')->middleware(['auth', 'admin']);
+Route::post('Data', 'DataController@store')->name('Data.store');
 Route::get('Data', 'DataController@index')->name('Data.index')->middleware(['auth', 'admin']);
 Route::get('Data/{Data}', 'DataController@show')->name('Data.show')->middleware(['auth', 'admin']);
 Route::put('Data/{Data}', 'DataController@update')->name('Data.update')->middleware(['auth', 'admin']);
 Route::delete('Data/{Data}', 'DataController@destroy')->name('Data.destroy')->middleware(['auth', 'admin']);
 Route::get('Data/{Data}/edit', 'DataController@edit')->name('Data.edit')->middleware(['auth', 'admin']);
+Route::get('Data/{name}/DataEntry', 'DataController@DataEntryIndex')->name('Data.DataEntryIndex')->middleware(['auth', 'admin']);
 
 // AccountController
 Route::get('Account/exportAll', 'AccountController@exportAll')->name('Account.exportAll')->middleware(['auth', 'admin']);
 Route::get('Account/exportSearch', 'AccountController@exportSearch')->name('Account.exportSearch')->middleware(['auth', 'admin']);
-Route::post('Account/{Account}/restore', 'AccountController@restore')->name('Account.restore');
+Route::post('Account/{Account}/restore', 'AccountController@restore')->name('Account.restore')->middleware(['auth', 'admin']);
 Route::resource('Account', 'AccountController');
 

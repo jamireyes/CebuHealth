@@ -53,6 +53,9 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_init' => ['required', 'max:2'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -68,12 +71,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        User::create([
+            'first_name' => $data['first_name'],
+            'middle_init' =>$data['middle_init'],
+            'last_name' => $data['last_name'],
             'email' => $data['email'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
             'RoleID' => $data['RoleID'],
         ]);
+        
+        return redirect('/Account')->with('success', 'New User Account Added!');
     }
 
     public function showRegistrationForm(){

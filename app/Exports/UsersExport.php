@@ -25,6 +25,9 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings, WithM
         return [
             'User ID',
             'Role',
+            'First Name',
+            'M.I.',
+            'Last Name',
             'Username',
             'Email',
             'Created At',
@@ -37,6 +40,9 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings, WithM
         return [
             $users->id,
             $users->role->Description,
+            $users->first_name,
+            $users->middle_init,
+            $users->last_name,
             $users->username,
             $users->email,
             $users->created_at,
@@ -48,7 +54,7 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings, WithM
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $event->sheet->getStyle('A1:F1')->applyFromArray([
+                $event->sheet->getStyle('A1:I1')->applyFromArray([
                     'font' => [
                         'bold' => true
                     ]

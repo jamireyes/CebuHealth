@@ -7,8 +7,6 @@
 
         <title>{{ config('app.name', 'Cebu Health') }}</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
 
         <!-- Styles -->
@@ -16,7 +14,7 @@
             html, body {
                 background-color: #fff;
                 color: #fff;
-                font-family: 'Nunito', sans-serif;
+                font-family: 'Open Sans', sans-serif;
                 font-weight: 200;
                 height: 100vh;
                 margin: 0;
@@ -83,6 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
+                    {{-- <img src="/img/Icon.png" style="max-width: 50%"> --}}
                     Cebu Health
                 </div>
             </div>

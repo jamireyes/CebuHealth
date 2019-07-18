@@ -17,10 +17,12 @@ class Admin
     public function handle($request, Closure $next)
     {
         if (Auth::check()) {
+            $username = Auth::user()->username;
+
             if (Auth::user()->RoleID == 1) {
                 return $next($request);
             } 
-            return redirect('/Data/create');
+            return redirect('/Data'.'/'.$username.'/DataEntry');
         }
     }
 }

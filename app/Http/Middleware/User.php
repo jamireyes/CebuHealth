@@ -20,7 +20,7 @@ class User
             if (Auth::user()->RoleID == 2) {
                 return $next($request);
             }
-            return redirect('/dashboard');
+            return redirect('/Dashboard');
         }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -38,12 +39,23 @@ class LoginController extends Controller
 
     protected function redirectTo( ) 
     {
+        
         if (Auth::check()) {
+            $username = Auth::user()->username;
+
             if (Auth::user()->RoleID == 1) {
-                return '/dashboard';
-            } elseif (Auth::user()->RoleID == 0) {
-                return '/Data/create';
+                $route = '/Dashboard';
+            } elseif (Auth::user()->RoleID == 2) {
+                $route = '/Data'.'/'.$username.'/DataEntry';
             }
-        }        
+        }
+
+        return $route;        
+    }
+
+    public function logout(Request $request) 
+    {
+        Auth::logout();
+        return redirect('/login');
     }
 }

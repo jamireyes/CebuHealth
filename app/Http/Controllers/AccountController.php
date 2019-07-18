@@ -8,7 +8,9 @@ use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Validator;
 use App\User;
+use App\Data;
 use App\role;
 use DataTables;
 
@@ -53,19 +55,31 @@ class AccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, array(
-            'email' => 'required|string|email|max:255',
-            'username' => 'required|string|max:255',
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required',
+            'middle_init' => 'required|max:2',
+            'last_name' => 'required',
+            'email' => 'required',
+            'username' => 'required',
             'RoleID' => 'required',
-        ));
+        ]);
 
         $data = User::find($id);
+        $data->first_name = $request->input('first_name');
+        $data->middle_init = $request->input('middle_init');
+        $data->last_name = $request->input('last_name');
         $data->email = $request->input('email');
         $data->username = $request->input('username');
         $data->RoleID = $request->input('RoleID');
         $data->save();
 
-        return redirect('/Account')->with('success', 'Account Updated!');
+        if($validator->fails()){
+            return redirect('/Account')->withErrors($validator);
+        }else{            
+            toastr()->success('User Account Updated!');
+            return redirect()->route('Account.index');
+        }
 
     }
 
@@ -78,13 +92,15 @@ class AccountController extends Controller
     public function destroy($id)
     {
         $user = User::find($id)->delete();
-        return redirect('/Account')->with('success', 'Account Removed!');
+        $datas = Data::where('User_ID', $id)->delete();
+        return redirect('/Account')->with('success', 'User Account Removed!');
     }
 
     public function restore($id)
     {
         $user = User::withTrashed()->find($id)->restore();
-        return redirect('/Account')->with('success', 'Account Restored!');
+        $datas = Data::where('User_ID', $id)->restore();
+        return redirect('/Account')->with('success', ' User Account Restored!');
     }
 
     public function exportAll()

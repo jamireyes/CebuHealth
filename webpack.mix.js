@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+var Chart = require('chart.js');
 
 /*
  |--------------------------------------------------------------------------

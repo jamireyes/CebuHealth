@@ -18,19 +18,22 @@ use Datatables;
 use Auth;
 
 class DataController extends Controller
-{
-    public function __construct()
-    {
-    }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+{    
     public function index()
     {
         $datas = Data::withTrashed()->get();
+        $barangays = barangay::all();
+        $bloodtypes = bloodTypes::all();
+        $clusters = clusters::all();
+        $districts = districts::all();
+        $mlgus = mlgu::all();
+
+        return view('Data.index', compact('datas', 'barangays', 'bloodtypes', 'clusters', 'districts', 'mlgus'));
+    }
+
+    public function DataEntryIndex()
+    {
+        $datas = Data::withTrashed()->where('User_ID', Auth::user()->id)->get();
         $barangays = barangay::all();
         $bloodtypes = bloodTypes::all();
         $clusters = clusters::all();
@@ -106,8 +109,8 @@ class DataController extends Controller
         $data->Purok = $request->input('Purok');
         $data->Barangay = $request->input('Barangay');
         $data->save();
-        
-        return (Auth::user()->RoleID == 1) ? redirect('/Data')->with('success', 'Entry Added!') : redirect('/Data/create')->with('success', 'Entry Added!');
+
+        return redirect('/Data')->with('success', 'Entry Added!');
     }
 
     /**
@@ -228,4 +231,5 @@ class DataController extends Controller
 
         return Excel::download($DataExportSearch, 'Data_Searched.xlsx');
     }
+
 }
