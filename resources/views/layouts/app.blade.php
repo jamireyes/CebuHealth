@@ -7,10 +7,7 @@
 
     <title>{{ config('app.name', 'Cebu Health') }}</title>
     
-    @toastr_css
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-
 </head>
 
 <body>
@@ -24,8 +21,97 @@
     <script src="{{ mix('js/app.js') }}"></script>
     <script>
         $(document).ready(function(){
+            
+            $('.modal').on('show.bs.modal', function (e) {
+                $('.modal .modal-dialog').attr('class', 'modal-dialog  animated zoomIn fastest');
+            });
+
+            $('.modal').on('hide.bs.modal', function (e) {
+                $('.modal .modal-dialog').attr('class', 'modal-dialog  animated zoomOutDown faster');
+            });
+
+            $('#fileImport').on('change',function(e){
+                var fileName = e.target.files[0].name;
+                $(this).next('.custom-file-label').html(fileName);
+            });
+
+            $('#importForm').submit(function(e){
+                e.preventDefault();   
+                var formData = new FormData(this);
+
+                $.ajax({                                                        
+                    type: 'POST',
+                    enctype: 'multipart/form-data',
+                    url: "{{ route('Data.importExcel') }}",
+                    processData: false,
+                    contentType: false,
+                    data: formData,                                                       
+                    success: function(imports){                                
+                        var data = JSON.parse(imports);
+                        console.log(data);
+                        $('#ImportModal').modal('show');
+                        let x;
+                        for(x = 0; x < data.imports.length; x++){
+                            ImportTable.row.add([
+                                data.imports[x].clusterno, 
+                                data.imports[x].districtno,
+                                data.imports[x].mlgu_no,
+                                data.imports[x].barangayno,
+                                data.imports[x].lname,
+                                data.imports[x].fname,
+                                data.imports[x].mi,
+                                data.imports[x].birthdate,
+                                data.imports[x].gender,
+                                data.imports[x].weight_kg,
+                                data.imports[x].height_cm,
+                                data.imports[x].bloodtypeid,
+                                data.imports[x].contact_no,
+                                data.imports[x].house_no,
+                                data.imports[x].street_name,
+                                data.imports[x].sitio,
+                                data.imports[x].purok,
+                                data.imports[x].barangay
+                            ]).draw();
+                            // $('tbody').append('<tr>');
+                            // $('tbody').append('<td>'+data.imports[x].clusterno+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].districtno+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].mlgu_no+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].barangayno+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].lname+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].fname+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].mi+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].birthdate+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].gender+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].weight_kg+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].height_cm+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].bloodtypeid+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].contact_no+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].house_no+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].street_name+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].sitio+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].purok+'</td>');
+                            // $('tbody').append('<td>'+data.imports[x].barangay+'</td>');
+                            // $('tbody').append('</tr>');
+                        }
+                    },                                                          
+                    error: function(jqXHR, textStatus, errorThrown){                  
+                        console.log(textStatus);
+                    }                                                           
+                });
+            })
+
+            const ImportTable = $('#ImportTable').DataTable({
+                "scrollX": true
+            });
 
             const AccountTable = $('#AccountTable').DataTable({
+                "scrollX": true,
+                "columnDefs": [
+                    {"className": "text-center", "targets": [0]}
+                ]
+            });
+
+            const TrashAccountTable = $('#TrashAccountTable').DataTable({
                 "scrollX": true,
                 "columnDefs": [
                     {"className": "text-center", "targets": [0]}
@@ -110,37 +196,53 @@
                 $('#restoreEntryForm').attr('action', route);
             });
             
-            var UserID = [];
+            /******************** Export User Account [Start] ***********************/
+            var UserID = [];                                                        //
+                                                                                    //
+            index = AccountTable.rows().nodes().length;                             //
+            array = AccountTable.rows().data();                                     /********************************/
+            for(x = 0; x < index; x++){                                             //  Initializes UserID array    //
+                UserID[x] = parseInt(array[x][1], 10);                              /********************************/
+            }                                                                       //
+                                                                                    //
+            AccountTable.on('search.dt', function(){                                //
+                index = AccountTable.rows({ filter : 'applied' }).nodes().length;   //
+                array = AccountTable.rows({ filter : 'applied' }).data();           /****************************************/
+                for(x = 0; x < index; x++){                                         //  UserID array updates upon search    //
+                    UserID[x] = parseInt(array[x][1], 10);                          /****************************************/
+                }                                                                   //
+                UserID.length = index--;                                            //
+            });                                                                     //
+                                                                                    //
+            $('#ExportUsers').click(function(){                                          //
+                if(UserID.length > 0){                                              //
+                    $.ajax({                                                        //
+                        type: 'GET',                                                //
+                        url: "{{ route('Account.exportAll') }}",                    //
+                        data: {                                                     //
+                            "_token": "{{ csrf_token() }}",                         /****************************/
+                            data: UserID                                            //  Sends UserID array to   //
+                        },                                                          //  controller via ajax     //
+                        success: function(response){                                /****************************/
+                            window.location.href = this.url;                        //
+                            toastr.info('Data Exported', 'Notification');           //
+                        },                                                          //
+                        error: function(jqXHR, textStatus, errorThrown){            //
+                            toastr.error(errorThrown, 'Error!');                    //
+                        }                                                           //
+                    });                                                             //
+                }                                                                   //
+            });                                                                     //
+            /********************** Export User Account [End] ***********************/
 
-            AccountTable.on('search.dt', function(){
-                index = AccountTable.rows({ filter : 'applied' }).nodes().length;
-                array = AccountTable.rows({ filter : 'applied' }).data();
-                for(x = 0; x < index; x++){
-                    UserID[x] = parseInt(array[x][1], 10);
-                }
-                UserID.length = index--;
-            });
-
-            $('#ExportSearch').click(function(){
-                if(UserID.length > 0){
-                    $.ajax({
-                        type: 'GET',
-                        url: "{{ route('Account.exportSearch') }}",
-                        data: { 
-                            "_token": "{{ csrf_token() }}",
-                            data: UserID
-                        },
-                        success: function(response){
-                            window.location.href = this.url;
-                        },
-                        error: function(jqXHR, textStatus, errorThrown){
-                            alert('ERROR: ' + errorThrown);
-                        }
-                    });
-                }
-            });
-
+            // Export Data Entry [Start]
             var DataID = [];
+
+            index = DataEntryTable.rows().nodes().length;
+            array = DataEntryTable.rows().data();
+            for(x = 0; x < index; x++){
+                DataID[x] = parseInt(array[x][1], 10);
+            }
 
             DataEntryTable.on('search.dt', function(){
                 index = DataEntryTable.rows({ filter : 'applied' }).nodes().length;
@@ -151,24 +253,27 @@
                 DataID.length = index--;
             });
 
-            $('#ExportSearchEntry').click(function(){
+            $('#ExportData').click(function(){
+                console.log(DataID);
                 if(DataID.length > 0){
                     $.ajax({
                         type: 'GET',
-                        url: "{{ route('Data.exportSearch') }}",
+                        url: "{{ route('Data.exportAll') }}",
                         data: { 
                             "_token": "{{ csrf_token() }}",
                             data: DataID
                         },
                         success: function(response){
                             window.location.href = this.url;
+                            toastr.info('Data Exported', 'Notification');
                         },
                         error: function(jqXHR, textStatus, errorThrown){
-                            alert('ERROR: ' + errorThrown);
+                            toastr.error(errorThrown, 'Error!');
                         }
                     });
                 }
             });
+            // Export Data Entry [End]
 
             const colors = {
                 color1: '#1a1c2c',
@@ -190,7 +295,7 @@
             };
             
             let {color1, color2, color3, color4, color5, color6, color7, color8, color9, color10, color11, color12, color13, color14, color15, color16} = colors;
-            
+
             $.ajax({
                 type: 'GET',
                 url: "{{ route('ClusterChart') }}",
@@ -200,11 +305,21 @@
                     var chart = new Chart(ClusterChart, {
                         type: 'doughnut',
                         data: {
-                            labels: [cluster.Clusters[0].Description, cluster.Clusters[1].Description, cluster.Clusters[2].Description, cluster.Clusters[3].Description],
+                            labels: [
+                                cluster.Clusters[0].Description, 
+                                cluster.Clusters[1].Description, 
+                                cluster.Clusters[2].Description, 
+                                cluster.Clusters[3].Description
+                                ],
                             datasets: [{
                                 label: 'Cluster',
                                 backgroundColor: [color9, color10, color11, color12],
-                                data: [cluster.Cluster1, cluster.Cluster2, cluster.Cluster3, cluster.Cluster4]
+                                data: [
+                                    cluster.Cluster1, 
+                                    cluster.Cluster2, 
+                                    cluster.Cluster3, 
+                                    cluster.Cluster4
+                                    ]
                             }]
                         },
 
@@ -290,10 +405,166 @@
                 }
             });
 
+            $.ajax({
+                type: 'GET',
+                url: "{{ route('MLGUChart') }}",
+                success: function(data){
+                    var mlgu = JSON.parse(data);
+                    const MLGU_Chart = document.getElementById('MLGU_Chart').getContext('2d');
+                    var chart = new Chart(MLGU_Chart, {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: [
+                                mlgu.MLGUs[0].Description,
+                                mlgu.MLGUs[1].Description,
+                                mlgu.MLGUs[2].Description,
+                                mlgu.MLGUs[3].Description,
+                                mlgu.MLGUs[4].Description,
+                                mlgu.MLGUs[5].Description,
+                                mlgu.MLGUs[6].Description,
+                                mlgu.MLGUs[7].Description,
+                                mlgu.MLGUs[8].Description,
+                                mlgu.MLGUs[9].Description,
+                                mlgu.MLGUs[10].Description,
+                                mlgu.MLGUs[11].Description,
+                                mlgu.MLGUs[12].Description,
+                                mlgu.MLGUs[13].Description,
+                                mlgu.MLGUs[14].Description,
+                                mlgu.MLGUs[15].Description,
+                                mlgu.MLGUs[16].Description,
+                                mlgu.MLGUs[17].Description,
+                                mlgu.MLGUs[18].Description,
+                                mlgu.MLGUs[19].Description,
+                                mlgu.MLGUs[20].Description,
+                                mlgu.MLGUs[21].Description,
+                                mlgu.MLGUs[22].Description,
+                                mlgu.MLGUs[23].Description,
+                                mlgu.MLGUs[24].Description,
+                                mlgu.MLGUs[25].Description,
+                                mlgu.MLGUs[26].Description,
+                                mlgu.MLGUs[27].Description,
+                                mlgu.MLGUs[28].Description,
+                                mlgu.MLGUs[29].Description,
+                                mlgu.MLGUs[30].Description,
+                                mlgu.MLGUs[31].Description,
+                                mlgu.MLGUs[32].Description,
+                                mlgu.MLGUs[33].Description,
+                                mlgu.MLGUs[34].Description,
+                                mlgu.MLGUs[35].Description,
+                                mlgu.MLGUs[36].Description,
+                                mlgu.MLGUs[37].Description,
+                                mlgu.MLGUs[38].Description,
+                                mlgu.MLGUs[39].Description,
+                                mlgu.MLGUs[40].Description,
+                                mlgu.MLGUs[41].Description,
+                                mlgu.MLGUs[42].Description,
+                                mlgu.MLGUs[43].Description,
+                                mlgu.MLGUs[44].Description,
+                                mlgu.MLGUs[45].Description,
+                                mlgu.MLGUs[46].Description,
+                                mlgu.MLGUs[47].Description,
+                                mlgu.MLGUs[48].Description,
+                                mlgu.MLGUs[49].Description,
+                                mlgu.MLGUs[50].Description,
+                                mlgu.MLGUs[51].Description,
+                                mlgu.MLGUs[52].Description,
+                                mlgu.MLGUs[53].Description,
+                                mlgu.MLGUs[54].Description,
+                                mlgu.MLGUs[55].Description,
+                                mlgu.MLGUs[56].Description,
+                                mlgu.MLGUs[57].Description,
+                                mlgu.MLGUs[58].Description,
+                                mlgu.MLGUs[59].Description
+                                ],
+                            datasets: [{
+                                label: 'MLGU',
+                                backgroundColor: '#0E1F58',
+                                data: [
+                                    mlgu.MLGU1,
+                                    mlgu.MLGU2,
+                                    mlgu.MLGU3,
+                                    mlgu.MLGU4,
+                                    mlgu.MLGU5,
+                                    mlgu.MLGU6,
+                                    mlgu.MLGU7,
+                                    mlgu.MLGU8,
+                                    mlgu.MLGU9,
+                                    mlgu.MLGU10,
+                                    mlgu.MLGU11,
+                                    mlgu.MLGU12,
+                                    mlgu.MLGU13,
+                                    mlgu.MLGU14,
+                                    mlgu.MLGU15,
+                                    mlgu.MLGU16,
+                                    mlgu.MLGU17,
+                                    mlgu.MLGU18,
+                                    mlgu.MLGU19,
+                                    mlgu.MLGU20,
+                                    mlgu.MLGU21,
+                                    mlgu.MLGU22,
+                                    mlgu.MLGU23,
+                                    mlgu.MLGU24,
+                                    mlgu.MLGU25,
+                                    mlgu.MLGU26,
+                                    mlgu.MLGU27,
+                                    mlgu.MLGU28,
+                                    mlgu.MLGU29,
+                                    mlgu.MLGU30,
+                                    mlgu.MLGU31,
+                                    mlgu.MLGU32,
+                                    mlgu.MLGU33,
+                                    mlgu.MLGU34,
+                                    mlgu.MLGU35,
+                                    mlgu.MLGU36,
+                                    mlgu.MLGU37,
+                                    mlgu.MLGU38,
+                                    mlgu.MLGU39,
+                                    mlgu.MLGU40,
+                                    mlgu.MLGU41,
+                                    mlgu.MLGU42,
+                                    mlgu.MLGU43,
+                                    mlgu.MLGU44,
+                                    mlgu.MLGU45,
+                                    mlgu.MLGU46,
+                                    mlgu.MLGU47,
+                                    mlgu.MLGU48,
+                                    mlgu.MLGU49,
+                                    mlgu.MLGU50,
+                                    mlgu.MLGU51,
+                                    mlgu.MLGU52,
+                                    mlgu.MLGU53,
+                                    mlgu.MLGU54,
+                                    mlgu.MLGU55,
+                                    mlgu.MLGU56,
+                                    mlgu.MLGU57,
+                                    mlgu.MLGU58,
+                                    mlgu.MLGU59,
+                                    mlgu.MLGU60
+                                    ]
+                            }]
+                        },
+
+                        options: {
+                            legend: {
+                                display: false, // true or false
+                                position: 'top' // top, bottom, left, or right
+                            },
+                            cutoutPercentage: 40,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                }
+            });
+
         });
     </script>
 </body>
-
-@toastr_js
+{{-- @toastr_js --}}
 @toastr_render
 </html>

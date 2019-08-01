@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 
-class User
+class CheckRole
 {
     /**
      * Handle an incoming request.
@@ -14,13 +14,12 @@ class User
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $role)
     {
-        if (Auth::check()) {
-            if (Auth::user()->RoleID == 2) {
-                return $next($request);
-            }
-            return redirect('/Dashboard');
+        if (Auth::user()->role->Description != $role) {
+            abort(401, 'Unauthorized Request!');
         }
+        return $next($request);
     }
+
 }

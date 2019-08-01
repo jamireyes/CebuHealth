@@ -5,11 +5,11 @@
     <div class="row justify-content-center">
         <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12">
             @include('include.message')
-            <div class="card shadow px-5">
-                <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body p-5">
                     <form action="{{ route('Data.store') }}" method="post" autocomplete="no">
                         @csrf
-                        <div class="form-row mt-5">
+                        <div class="form-row">
                             <div class="form-group col-sm-6">
                                 <label for="ClusterNo">Cluster</label>
                                 <select id="ClusterNo" name="ClusterNo" class="form-control">
@@ -119,8 +119,8 @@
                             <input type="text" id="Barangay" name="Barangay" class="form-control" placeholder="Barangay">
                         </div>
                         <div class="form-group mt-5 text-center">
-                            {{Form::submit('Submit', ['class' => 'btn btn-primary btn-lg btn-user'])}}
-                            <input type="reset" class="btn btn-secondary btn-lg" value="Clear">
+                            {{Form::submit('Submit', ['class' => 'btn btn-primary btn-user'])}}
+                            <input type="reset" class="btn btn-secondary" value="Clear">
                         </div>
                     </form>
                 </div>

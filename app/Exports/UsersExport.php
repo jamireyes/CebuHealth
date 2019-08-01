@@ -15,9 +15,15 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithEvents
 {
+    public function setUsers($users)
+    {
+        $this->users = $users;
+        return $this;
+    }
+    
     public function collection()
-    { 
-        return User::withTrashed()->with('role')->get();
+    {
+        return (sizeof($this->users) > 1) ? User::withTrashed()->with('role')->whereIn('id', $this->users)->get() : User::withTrashed()->with('role')->where('id', $this->users)->get();
     }
 
     public function headings(): array

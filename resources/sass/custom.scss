@@ -52,3 +52,8 @@
 .success:hover {
     color: #2fa360;
 }
+
+.animated.fastest {
+    -webkit-animation-duration: 200ms;
+    animation-duration: 200ms;
+  }

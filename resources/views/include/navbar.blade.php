@@ -19,10 +19,6 @@
                         <li class="nav-item">
                             <a class="nav-link {{ (Route::current()->getName() == 'Data.index') ? 'active' : '' }}" href="{{ route('Data.index')}}">Data Entry</a>
                         </li>
-                    @elseif(Auth::user()->RoleID == 2)
-                        <li class="nav-item">
-                            <a class="nav-link {{(Route::current()->getName() == 'Data.DataEntryIndex') ? 'active' : ''}}" href="{{ route('Data.DataEntryIndex', ['name' => Auth::user()->username]) }}">Data Entry</a>
-                        </li>
                     @endif
                 @endif
             </ul>
@@ -33,22 +29,15 @@
                 @if(Auth::check()) 
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->username }} <span class="caret"></span>
+                            {{ Auth::user()->first_name.' '.Auth::user()->middle_init.'. '.Auth::user()->last_name }} <span class="caret"></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             @if (Auth::user()->RoleID == 1)
-                                @if (Route::has('register'))
-                                    <a class="dropdown-item" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                    <div class="dropdown-divider"></div>
-                                @endif
+                                <a class="dropdown-item" href="{{ route('register') }}">Register</a>
+                                <div class="dropdown-divider"></div>
                             @endif
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
-                            </a>
-
+                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
@@ -56,7 +45,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
                     </li>
                 @endif
             </ul>

@@ -37,12 +37,10 @@ class LoginController extends Controller
         return 'username';
     }
 
-    protected function redirectTo( ) 
+    protected function redirectTo() 
     {
-        
         if (Auth::check()) {
             $username = Auth::user()->username;
-
             if (Auth::user()->RoleID == 1) {
                 $route = '/Dashboard';
             } elseif (Auth::user()->RoleID == 2) {
@@ -50,12 +48,13 @@ class LoginController extends Controller
             }
         }
 
-        return $route;        
+        return $route;      
     }
 
     public function logout(Request $request) 
     {
         Auth::logout();
-        return redirect('/login');
+        
+        return redirect()->route('login');
     }
 }

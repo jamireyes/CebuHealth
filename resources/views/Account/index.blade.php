@@ -3,16 +3,14 @@
 @section('content')
 @include('include.message')
 <div class="card shadow">
-    <div class="card-header">
-        <div class="d-flex">
-            <div class="mr-auto p-1"><h5 class="text-secondary">User Accounts</h5></div>
-            <div class="p-1"><a class="btn btn-sm btn-primary" href="{{ url('/register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></div>
-            <div class="p-1"><a class="btn btn-sm btn-success" href="{{ route('Account.exportAll') }}"><i class="fa fa-download" aria-hidden="true"></i> Export All</a></div>
-            <div class="p-1"><button class="btn btn-sm btn-success" href="{{ route('Account.exportSearch') }}" id="ExportSearch"><i class="fa fa-download" aria-hidden="true"></i> Export Searched</button></div>
-        </div>
-    </div>
     <div class="card-body">
-        <table id="AccountTable" class="table table-striped display compact nowrap" style="width:100%">
+        <div class="d-flex">
+            <div class="mr-auto p-1"><h5 class="text-secondary"><i class="fa fa-user pr-2" aria-hidden="true"></i> User Accounts</h5></div>
+            <div class="p-1"><a class="btn btn-sm btn-primary" href="{{ url('/register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></div>
+            <div class="p-1"><button id="ExportUsers" class="btn btn-sm btn-success" href="{{ route('Account.exportAll') }}"><i class="fa fa-download" aria-hidden="true"></i> Export</button></div>
+        </div>
+        <hr>
+        <table id="AccountTable" class="table table-striped display compact nowrap w-100" style="font-size: 12px;">
             <thead>
                 <tr>
                     <th>Status</th>
@@ -44,7 +42,7 @@
                         <td>{{$user->created_at}}</td>
                         <td>{{$user->updated_at}}</td>
                         <td>
-                            <a id="EditAccountBtn" href="#" data-toggle="modal" data-target="#EditAccount" data-user="{{$user}}"><i class="fas fa-edit warning" data-toggle="tooltip" title="Edit"></i></a>
+                            <a id="EditAccountBtn" href="#" data-toggle="modal" data-backdrop="static" data-target="#EditAccount" data-user="{{$user}}"><i class="fas fa-edit warning" data-toggle="tooltip" title="Edit"></i></a>
                             @if($user->deleted_at == NULL)
                                 <a id="DeleteAccountBtn" href="#" data-toggle="modal" data-target="#DeleteAccount" data-id="{{$user->id}}" data-first="{{$user->first_name}}" data-last="{{$user->last_name}}" data-middle="{{$user->middle_init}}"><i class="fas fa-trash-alt danger" data-toggle="tooltip" title="Delete"></i></a>
                             @else

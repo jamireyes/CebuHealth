@@ -2,19 +2,34 @@
 
 @section('content')
 
-@include('include.message')
-    <div class="card shadow">
-        <div class="card-header">
-            <div class="d-flex">
-                <div class="mr-auto p-1"><h5 class="text-secondary">Data Entry</h5></div>
-                <div class="p-1"><a href="{{ route('Data.create') }}" class="btn btn-sm btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add Entry</a></div>
-                <div class="p-1"><a href="{{ route('Data.exportAll') }}" class="btn btn-sm btn-success"><i class="fa fa-download" aria-hidden="true"></i> Export All</a></div>
-                <div class="p-1"><button id="ExportSearchEntry" href="{{ route('Data.exportSearch') }}" class="btn btn-sm btn-success"><i class="fa fa-download" aria-hidden="true"></i> Export Searched</button></div>
-            </div>
+{{-- @include('include.message') --}}
+    <div class="d-flex">
+        <div class="mr-auto p-1"><h3 class="text-secondary"><i class="fa fa-file pr-2" aria-hidden="true"></i> Data Entry</h3></div>
+        <div class="p-1">
+            <a href="{{ route('Data.create') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add Entry</a>
         </div>
+        <div class="p-1">
+            <button id="ExportData" class="btn btn-secondary" href="{{ route('Data.exportAll') }}"><i class="fa fa-download" aria-hidden="true"></i> Export</button>
+        </div>
+        <div class="p-1">
+            <form id="importForm" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <button id="ImportSubmit" type="submit" class="btn btn-secondary"><i class="fas fa-upload"></i> Import</button>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="file" id="fileImport">
+                        <label class="custom-file-label" for="fileImport">Choose file</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card shadow">
         @if(!$datas->isEmpty())
             <div class="card-body">
-                <table id="DataEntryTable" class="table table-striped display compact nowrap" style="width:100%">
+                <table id="DataEntryTable" class="table table-striped display compact nowrap w-100" style="font-size: 12px;">
                     <thead>
                         <tr>
                             <th>Status</th>
@@ -24,10 +39,8 @@
                             <th>District</th>
                             <th>mLGU</th>
                             <th>Barangay</th>
-                            <th>Last Name</th>
-                            <th>First Name</th>
-                            <th>M.I.</th>
-                            <th>Birthdate</th>
+                            <th>Full Name</th>
+                            <th>Birthday</th>
                             <th>Gender</th>
                             <th>Weight</th>
                             <th>Height</th>
@@ -59,9 +72,7 @@
                                 <td>{{$data->district->Description}}</td>
                                 <td>{{$data->mlgu->Description}}</td>
                                 <td>{{$data->barangay->Description}}</td>
-                                <td>{{$data->LName}}</td>
-                                <td>{{$data->FName}}</td>
-                                <td>{{$data->MI}}</td>
+                                <td>{{$data->FName.' '.$data->MI.'. '.$data->LName}}</td>
                                 <td>{{$data->Birthdate}}</td>
                                 <td>{{($data->Gender == 1) ? 'Male' : 'Female'}}</td>
                                 <td>{{$data->Weight_kg}} kg</td>
@@ -76,7 +87,7 @@
                                 <td>{{$data->created_at}}</td>
                                 <td>{{$data->updated_at}}</td>
                                 <td>
-                                    <a id="EditEntryBtn" href="#" data-toggle="modal" data-target="#EditEntry" data-data="{{$data}}"><i class="fas fa-edit warning" data-toggle="tooltip" title="Edit"></i></a>
+                                    <a id="EditEntryBtn" href="#" data-toggle="modal" data-backdrop="static" data-target="#EditEntry" data-data="{{$data}}"><i class="fas fa-edit warning" data-toggle="tooltip" title="Edit"></i></a>
                                     @if($data->deleted_at == NULL)
                                         <a id="DeleteEntryBtn" href="#" data-toggle="modal" data-target="#DeleteEntry" data-id="{{$data->Data_ID}}"><i class="fas fa-trash-alt danger" data-toggle="tooltip" title="Delete"></i></a>
                                     @else
@@ -91,6 +102,8 @@
             @include('Data.edit')
             @include('Data.delete')
             @include('Data.restore')
+            @include('Data.ViewImport')
+            
         @else
             <h4 class="text-center py-5" style="color:grey"><i class="fas fa-exclamation-triangle"></i> No data found</h4>
         @endif

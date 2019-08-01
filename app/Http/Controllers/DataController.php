@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Exports\DataExport;
 use App\Exports\DataExportSearch;
+use App\Imports\DataImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
@@ -33,7 +34,7 @@ class DataController extends Controller
 
     public function DataEntryIndex()
     {
-        $datas = Data::withTrashed()->where('User_ID', Auth::user()->id)->get();
+        $datas = Data::all()->where('User_ID', Auth::user()->id);
         $barangays = barangay::all();
         $bloodtypes = bloodTypes::all();
         $clusters = clusters::all();
@@ -109,20 +110,9 @@ class DataController extends Controller
         $data->Purok = $request->input('Purok');
         $data->Barangay = $request->input('Barangay');
         $data->save();
+        toastr()->success('New Entry Added!');
 
-        return redirect('/Data')->with('success', 'Entry Added!');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $datas = Data::find($id);
-        return view('Data.show', compact('datas'));
+        return (Auth::user()->role->Description == 'Admin') ? redirect()->route('Data.index') : redirect()->route('Data.DataEntryIndex', Auth::user()->username);
     }
 
     /**
@@ -193,8 +183,9 @@ class DataController extends Controller
         $data->Purok = $request->input('Purok');
         $data->Barangay = $request->input('Barangay');
         $data->save();
-        
-        return redirect('/Data')->with('success', 'Entry Updated!')->with('success', 'Entry Updated!');
+        toastr()->success('Entry Updated!');
+
+        return (Auth::user()->role->Description == 'Admin') ? redirect()->route('Data.index') : redirect()->route('Data.DataEntryIndex', Auth::user()->username);
     }
 
     /**
@@ -206,30 +197,40 @@ class DataController extends Controller
     public function destroy($id)
     {
         $data = Data::find($id)->delete();
-        return redirect('/Data')->with('success', 'Entry Removed!');
+        toastr()->success('Entry Removed!');
+
+        return (Auth::user()->role->Description == 'Admin') ? redirect()->route('Data.index') : redirect()->route('Data.DataEntryIndex', Auth::user()->username);
     }
 
     public function restore($id)
     {
         $data = Data::withTrashed()->find($id)->restore();
-        return redirect('/Data')->with('success', 'Entry Restored!');
+        toastr()->success('Entry Restored!');
+
+        return redirect()->route('Data.index');
     }
 
-    public function exportAll()
-    {
-        return Excel::download(new DataExport, 'Data_All.xlsx');
-    }
-
-    public function exportSearch(Request $request)
+    public function exportAll(Request $request)
     {
         $ex = $request->get('data');
+        
         foreach($ex as $x){
             $array[] = (int)$x;
         }
-        $DataExportSearch = new DataExportSearch;
-        $DataExportSearch->setData($array);
 
-        return Excel::download($DataExportSearch, 'Data_Searched.xlsx');
+        $DataExport = new DataExport;
+        $DataExport->setData($array);
+        
+        return Excel::download($DataExport, 'Data_All.xlsx');
+    }
+
+    public function importExcel(Request $request)
+    {
+        $file = Excel::toArray(new DataImport, $request->file, \Maatwebsite\Excel\Excel::XLSX);
+        $imports = $file[0];
+
+        return json_encode(compact('imports'));
+        //return Excel::import(new DataImport, $request->file, \Maatwebsite\Excel\Excel::XLSX);
     }
 
 }

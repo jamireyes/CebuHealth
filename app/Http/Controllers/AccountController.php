@@ -19,7 +19,6 @@ class AccountController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('admin');
     }
     
     /**
@@ -93,22 +92,21 @@ class AccountController extends Controller
     {
         $user = User::find($id)->delete();
         $datas = Data::where('User_ID', $id)->delete();
-        return redirect('/Account')->with('success', 'User Account Removed!');
+        toastr()->success('User Account Removed!');
+
+        return redirect()->route('Account.index');
     }
 
     public function restore($id)
     {
         $user = User::withTrashed()->find($id)->restore();
         $datas = Data::where('User_ID', $id)->restore();
-        return redirect('/Account')->with('success', ' User Account Restored!');
+        toastr()->success('User Account Restored!');
+
+        return redirect()->route('Account.index');
     }
 
-    public function exportAll()
-    {
-        return Excel::download(new UsersExport, 'User_All.xlsx');
-    }
-
-    public function exportSearch(Request $request)
+    public function exportAll(Request $request)
     {
         $users = $request->get('data');
         foreach($users as $user){
@@ -117,6 +115,11 @@ class AccountController extends Controller
         $UsersExportSearch = new UsersExportSearch;
         $UsersExportSearch->setUsers($data);
 
-        return Excel::download($UsersExportSearch, 'User_Searched.xlsx');
+        return Excel::download($UsersExportSearch, 'User_All.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        Excel::import(new DataImport, request()->file('file'));
     }
 }

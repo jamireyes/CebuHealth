@@ -1,5 +1,5 @@
 <div class="modal fade" id="EditAccount" tabindex="-1" role="dialog" aria-labelledby="EditAccountLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog animated zoomIn fastest" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="EditAccountLabel">Edit Account</h5>

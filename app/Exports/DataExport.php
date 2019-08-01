@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Data;
+use Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -14,12 +15,39 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 class DataExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithEvents
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+    public function setData($data)
+    {
+        $this->data = $data;
+        return $this;
+    }
+
     public function collection()
     {
-        return Data::withTrashed()->with('user', 'cluster', 'district', 'mlgu', 'barangay', 'bloodType')->get();
+        if (Auth::check()) {
+            if (Auth::user()->role->Description != 'Admin') {
+                $query1 = Data::withTrashed()
+                            ->with('user', 'cluster', 'district', 'mlgu', 'barangay', 'bloodType')
+                            ->whereIn('Data_ID', $this->data)
+                            ->where('User_ID', Auth::user()->id)
+                            ->get();
+                $query2 = Data::withTrashed()
+                            ->with('user', 'cluster', 'district', 'mlgu', 'barangay', 'bloodType')
+                            ->where('Data_ID', $this->data)
+                            ->where('User_ID', Auth::user()->id)
+                            ->get();
+            } else {
+                $query1 = Data::withTrashed()
+                            ->with('user', 'cluster', 'district', 'mlgu', 'barangay', 'bloodType')
+                            ->whereIn('Data_ID', $this->data)
+                            ->get();
+                $query2 = Data::withTrashed()
+                            ->with('user', 'cluster', 'district', 'mlgu', 'barangay', 'bloodType')
+                            ->where('Data_ID', $this->data)
+                            ->get();
+            }
+        }
+
+        return (sizeof($this->data) > 1) ? $query1 : $query2;
     }
 
     public function headings(): array
@@ -63,7 +91,7 @@ class DataExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMa
             $data->FName,
             $data->MI,
             $data->Birthdate,
-            $data->Gender ? 'Male' : 'Female',
+            $data->Gender ? 'M' : 'F',
             $data->Weight_kg,
             $data->Height_cm,
             $data->bloodtype->Description,

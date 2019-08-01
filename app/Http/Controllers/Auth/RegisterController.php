@@ -41,7 +41,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('admin');
+        $this->middleware('role:Admin');
     }
 
     /**
@@ -80,8 +80,9 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'RoleID' => $data['RoleID'],
         ]);
+        toastr()->success('Successful!', 'New User Account Added!');
         
-        return redirect('/Account')->with('success', 'New User Account Added!');
+        return redirect()->route('Account.index');
     }
 
     public function showRegistrationForm(){
