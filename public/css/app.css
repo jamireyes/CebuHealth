@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:300&display=swap);table.dataTable {
+@import url(https://fonts.googleapis.com/css?family=Open+Sans&display=swap);table.dataTable {
   clear: both;
   margin-top: 6px !important;
   margin-bottom: 6px !important;
@@ -3867,7 +3867,7 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:las
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-  --font-family-sans-serif: "Nunito", sans-serif;
+  --font-family-sans-serif: "Open Sans", sans-serif;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -3899,7 +3899,7 @@ section {
 
 body {
   margin: 0;
-  font-family: "Nunito", sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 0.9rem;
   font-weight: 400;
   line-height: 1.6;
@@ -9972,7 +9972,6 @@ a.close.disabled {
 
 @media (min-width: 1200px) {
   .modal-xl {
-    width: 90%;
     max-width: 1140px;
   }
 }
@@ -9982,7 +9981,7 @@ a.close.disabled {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: "Nunito", sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.6;
@@ -10107,7 +10106,7 @@ a.close.disabled {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: "Nunito", sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.6;
@@ -14736,7 +14735,7 @@ button.toast-close-button {
   color: white;
 }
 
-.bg-welcome {
+.bg-custom {
   background: #223775;
   background: radial-gradient(ellipse at center, #223775 0%, #0d1f58 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#223775", endColorstr="#0d1f58", GradientType=1 );
@@ -14777,6 +14776,56 @@ button.toast-close-button {
 .animated.fastest {
   -webkit-animation-duration: 200ms;
   animation-duration: 200ms;
+}
+
+.login {
+  -webkit-transform: translate(15%, 50%);
+          transform: translate(15%, 50%);
+}
+
+.selected {
+  background-color: #6574cd !important;
+  color: #fff !important;
+}
+
+.fw100 {
+  font-weight: 100;
+}
+
+.fw200 {
+  font-weight: 200;
+}
+
+.fw300 {
+  font-weight: 300;
+}
+
+.fw400 {
+  font-weight: 400;
+}
+
+.fw500 {
+  font-weight: 500;
+}
+
+.fw600 {
+  font-weight: 600;
+}
+
+.fw700 {
+  font-weight: 700;
+}
+
+.fw800 {
+  font-weight: 800;
+}
+
+.fw900 {
+  font-weight: 900;
+}
+
+table.dataTable td {
+  font-weight: 500 !important;
 }
 
 .carousel {

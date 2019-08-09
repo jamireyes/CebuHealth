@@ -22,86 +22,9 @@
     <script>
         $(document).ready(function(){
             
-            $('.modal').on('show.bs.modal', function (e) {
-                $('.modal .modal-dialog').attr('class', 'modal-dialog  animated zoomIn fastest');
-            });
-
-            $('.modal').on('hide.bs.modal', function (e) {
-                $('.modal .modal-dialog').attr('class', 'modal-dialog  animated zoomOutDown faster');
-            });
-
-            $('#fileImport').on('change',function(e){
-                var fileName = e.target.files[0].name;
-                $(this).next('.custom-file-label').html(fileName);
-            });
-
-            $('#importForm').submit(function(e){
-                e.preventDefault();   
-                var formData = new FormData(this);
-
-                $.ajax({                                                        
-                    type: 'POST',
-                    enctype: 'multipart/form-data',
-                    url: "{{ route('Data.importExcel') }}",
-                    processData: false,
-                    contentType: false,
-                    data: formData,                                                       
-                    success: function(imports){                                
-                        var data = JSON.parse(imports);
-                        console.log(data);
-                        $('#ImportModal').modal('show');
-                        let x;
-                        for(x = 0; x < data.imports.length; x++){
-                            ImportTable.row.add([
-                                data.imports[x].clusterno, 
-                                data.imports[x].districtno,
-                                data.imports[x].mlgu_no,
-                                data.imports[x].barangayno,
-                                data.imports[x].lname,
-                                data.imports[x].fname,
-                                data.imports[x].mi,
-                                data.imports[x].birthdate,
-                                data.imports[x].gender,
-                                data.imports[x].weight_kg,
-                                data.imports[x].height_cm,
-                                data.imports[x].bloodtypeid,
-                                data.imports[x].contact_no,
-                                data.imports[x].house_no,
-                                data.imports[x].street_name,
-                                data.imports[x].sitio,
-                                data.imports[x].purok,
-                                data.imports[x].barangay
-                            ]).draw();
-                            // $('tbody').append('<tr>');
-                            // $('tbody').append('<td>'+data.imports[x].clusterno+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].districtno+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].mlgu_no+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].barangayno+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].lname+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].fname+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].mi+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].birthdate+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].gender+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].weight_kg+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].height_cm+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].bloodtypeid+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].contact_no+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].house_no+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].street_name+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].sitio+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].purok+'</td>');
-                            // $('tbody').append('<td>'+data.imports[x].barangay+'</td>');
-                            // $('tbody').append('</tr>');
-                        }
-                    },                                                          
-                    error: function(jqXHR, textStatus, errorThrown){                  
-                        console.log(textStatus);
-                    }                                                           
-                });
-            })
-
             const ImportTable = $('#ImportTable').DataTable({
-                "scrollX": true
+                "scrollX": true,
+                select: true
             });
 
             const AccountTable = $('#AccountTable').DataTable({
@@ -124,6 +47,120 @@
                 "columnDefs": [
                     {"className": "text-center", "targets": [0]}
                 ]
+            });
+
+            $('.modal').on('show.bs.modal', function (e) {
+                $('.modal .modal-dialog').attr('class', 'h-100 modal-dialog animated zoomIn fastest');
+            });
+
+            $('.modal').on('hide.bs.modal', function (e) {
+                $('.modal .modal-dialog').attr('class', 'h-100 modal-dialog animated zoomOut slow');
+            });
+
+            $('#EditEntry').on('show.bs.modal', function (e){
+                $('#EditEntry .modal-dialog').attr('class', 'modal-dialog modal-lg animated zoomOIn fastest');
+            });
+
+            $('#EditEntry').on('hide.bs.modal', function (e){
+                $('#EditEntry .modal-dialog').attr('class', 'modal-dialog modal-lg animated zoomOut slow');
+            });
+
+            $('#ImportModal').on('show.bs.modal', function (e){
+                $('#ImportModal .modal-dialog').attr('class', 'modal-dialog modal-dialog-scrollable modal-xl animated zoomOIn fastest');
+            });
+
+            $('#ImportModal').on('hide.bs.modal', function (e){
+                $('#ImportModal .modal-dialog').attr('class', 'modal-dialog modal-xl animated zoomOut slow');
+            });
+
+            $('#fileImport').on('change',function(e){
+                var fileName = e.target.files[0].name;
+                $(this).next('.custom-file-label').html(fileName);
+            });
+
+            $('#importForm').submit(function(e){
+                e.preventDefault();   
+                var formData = new FormData(this);
+
+                $.ajax({                                                        
+                    type: 'POST',
+                    enctype: 'multipart/form-data',
+                    url: "{{ route('Data.importExcel') }}",
+                    processData: false,
+                    contentType: false,
+                    data: formData,                                                       
+                    success: function(imports){                                
+                        var data = JSON.parse(imports);
+                        let x;
+                        console.log(data);
+                        toastr.info('Kindly check the data entry before saving import.', 'Notification!')
+                        $('#ImportModal').modal('show');
+                        ImportTable.clear();
+
+                        for(x = 0; x < data.imports.length; x++){
+                            ImportTable.row.add([
+                                data.imports[x].clusterno, 
+                                data.imports[x].districtno,
+                                data.imports[x].mlgu_no,
+                                data.imports[x].barangayno,
+                                data.imports[x].lname,
+                                data.imports[x].fname,
+                                data.imports[x].mi,
+                                data.imports[x].birthdate,
+                                data.imports[x].gender,
+                                data.imports[x].weight_kg,
+                                data.imports[x].height_cm,
+                                data.imports[x].bloodtypeid,
+                                data.imports[x].contact_no,
+                                data.imports[x].house_no,
+                                data.imports[x].street_name,
+                                data.imports[x].sitio,
+                                data.imports[x].purok,
+                                data.imports[x].barangay
+                            ]).draw();
+                        };
+                        $('#Importbtn').click(function(){
+                            //console.log(ImportTable.rows('.selected').data());
+                            // data = ImportTable.rows().data();
+                            // console.log(data[0]);
+                            // newData = JSON.parse(imports);
+                            // newData = {
+                            //     BarangayNo: 1,
+                            //     BloodTypeID: 1,
+                            //     ClusterNo: 1,
+                            // };
+                            // console.log(JSON.stringify(newData));
+
+                            console.log(data.imports[0].birthdate);
+                            $.ajax({
+                                type: 'POST',
+                                url: "{{ route('Data.importExcelToDB') }}",
+                                dataType: 'json',
+                                data: {
+                                    "_token": "{{ csrf_token() }}", 
+                                    data: JSON.stringify(newData)
+                                },
+                                success: function(response){
+                                    console.log(response);
+                                },
+                                error: function(jqXHR, textStatus, errorThrown){           
+                                    toastr.error(errorThrown, 'Error!');                   
+                                }  
+                            });
+                        });
+                    },                                                          
+                    error: function(jqXHR, textStatus, errorThrown){                  
+                        toastr.error(errorThrown+' '+textStatus, 'Error!');
+                    }                                                           
+                });
+            });
+
+            $('#ImportTable tbody').on('click', 'tr', function(){
+                if($(this).hasClass('selected')){
+                    $(this).removeClass('selected');
+                }else{
+                    $(this).addClass('selected');
+                }
             });
 
             AccountTable.on('click', '#EditAccountBtn', function(){

@@ -1,15 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-@include('include.message')
+{{-- @include('include.message') --}}
+<div class="d-flex mb-3">
+    <div class="mr-auto p-1"><h3 class="text-secondary"><i class="fa fa-user pr-2" aria-hidden="true"></i> User Accounts</h3></div>
+    <div class="p-1"><a class="btn btn-primary" href="{{ url('/register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></div>
+    <div class="p-1"><button id="ExportUsers" class="btn btn-secondary" href="{{ route('Account.exportAll') }}"><i class="fa fa-download" aria-hidden="true"></i> Export</button></div>
+</div>
 <div class="card shadow">
     <div class="card-body">
-        <div class="d-flex">
-            <div class="mr-auto p-1"><h5 class="text-secondary"><i class="fa fa-user pr-2" aria-hidden="true"></i> User Accounts</h5></div>
-            <div class="p-1"><a class="btn btn-sm btn-primary" href="{{ url('/register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></div>
-            <div class="p-1"><button id="ExportUsers" class="btn btn-sm btn-success" href="{{ route('Account.exportAll') }}"><i class="fa fa-download" aria-hidden="true"></i> Export</button></div>
-        </div>
-        <hr>
         <table id="AccountTable" class="table table-striped display compact nowrap w-100" style="font-size: 12px;">
             <thead>
                 <tr>
@@ -35,7 +34,7 @@
                             @endif
                         </td>
                         <td>{{$user->id}}</td>
-                        <td>{{$user->first_name}} {{$user->middle_init}} {{$user->last_name}}</td>
+                        <td>{{$user->first_name}} {{$user->middle_init}}. {{$user->last_name}}</td>
                         <td>{{$user->username}}</td>
                         <td>{{$user->email}}</td>
                         <td>{{$user->role->Description}}</td>

@@ -110,7 +110,7 @@ class DataController extends Controller
         $data->Purok = $request->input('Purok');
         $data->Barangay = $request->input('Barangay');
         $data->save();
-        toastr()->success('New Entry Added!');
+        toastr()->success('New Entry Added!', 'Successful!');
 
         return (Auth::user()->role->Description == 'Admin') ? redirect()->route('Data.index') : redirect()->route('Data.DataEntryIndex', Auth::user()->username);
     }
@@ -183,7 +183,7 @@ class DataController extends Controller
         $data->Purok = $request->input('Purok');
         $data->Barangay = $request->input('Barangay');
         $data->save();
-        toastr()->success('Entry Updated!');
+        toastr()->success('Entry Updated!', 'Successful!');
 
         return (Auth::user()->role->Description == 'Admin') ? redirect()->route('Data.index') : redirect()->route('Data.DataEntryIndex', Auth::user()->username);
     }
@@ -197,7 +197,7 @@ class DataController extends Controller
     public function destroy($id)
     {
         $data = Data::find($id)->delete();
-        toastr()->success('Entry Removed!');
+        toastr()->success('Entry Removed', 'Successful!');
 
         return (Auth::user()->role->Description == 'Admin') ? redirect()->route('Data.index') : redirect()->route('Data.DataEntryIndex', Auth::user()->username);
     }
@@ -205,7 +205,7 @@ class DataController extends Controller
     public function restore($id)
     {
         $data = Data::withTrashed()->find($id)->restore();
-        toastr()->success('Entry Restored!');
+        toastr()->success('Entry Restored!', 'Successful!');
 
         return redirect()->route('Data.index');
     }
@@ -231,6 +231,54 @@ class DataController extends Controller
 
         return json_encode(compact('imports'));
         //return Excel::import(new DataImport, $request->file, \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    public function importExcelToDB(Request $request)
+    {
+        // $this->validate($request, [
+        //     'ClusterNo' => 'required',
+        //     'DistrictNo' => 'required',
+        //     'mLGU_No' => 'required',
+        //     'BarangayNo' => 'required',
+        //     'LName' => 'required',
+        //     'FName' => 'required',
+        //     'MI' => 'required',
+        //     'Birthdate' => 'required',
+        //     'Gender' => 'required',
+        //     'Weight_kg' => 'required',
+        //     'Height_cm' => 'required',
+        //     'BloodTypeID' => 'required',
+        //     'Contact_No' => 'required',
+        //     'House_No' => 'required',
+        //     'Street_Name' => 'required',
+        //     'Sitio' => 'required',
+        //     'Purok' => 'required',
+        //     'Barangay' => 'required',
+        // ]);
+        dd($request);
+
+        $data = new Data;
+        $data->User_ID = Auth::user()->id;
+        $data->ClusterNo = $request->input('ClusterNo');
+        $data->DistrictNo = $request->input('DistrictNo');
+        $data->mLGU_No = $request->input('mLGU_No');
+        $data->BarangayNo = $request->input('BarangayNo');
+        $data->LName = $request->input('LName');
+        $data->FName = $request->input('FName');
+        $data->MI = $request->input('MI');
+        $data->Birthdate = $request->input('Birthdate');
+        $data->Gender = $request->input('Gender');
+        $data->Weight_kg = $request->input('Weight_kg');
+        $data->Height_cm = $request->input('Height_cm');
+        $data->BloodTypeID = $request->input('BloodTypeID');
+        $data->Contact_No = $request->input('Contact_No');
+        $data->House_No = $request->input('House_No');
+        $data->Street_Name = $request->input('Street_Name');
+        $data->Sitio = $request->input('Sitio');
+        $data->Purok = $request->input('Purok');
+        $data->Barangay = $request->input('Barangay');
+        $data->save();
+        toastr()->success('New Entry Added!', 'Successful!');
     }
 
 }

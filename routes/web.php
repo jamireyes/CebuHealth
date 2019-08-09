@@ -32,6 +32,7 @@ Route::get('DistrictChart', 'DashboardController@DistrictChart')->name('District
 Route::get('MLGUChart', 'DashboardController@MLGUChart')->name('MLGUChart');
 
 // DataController
+Route::post('Data/importExcelToDB', 'DataController@importExcelToDB')->name('Data.importExcelToDB');
 Route::post('Data/importExcel', 'DataController@importExcel')->name('Data.importExcel');
 Route::get('Data/exportAll', 'DataController@exportAll')->name('Data.exportAll')->middleware(['auth']);
 Route::post('Data/{Data}/restore', 'DataController@restore')->name('Data.restore')->middleware(['auth']);

@@ -10,7 +10,7 @@
     color: white;
 }
 
-.bg-welcome {
+.bg-custom {
     background: rgba(34,55,117,1);
     background: -moz-radial-gradient(center, ellipse cover, rgba(34,55,117,1) 0%, rgba(13,31,88,1) 100%);
     background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(34,55,117,1)), color-stop(100%, rgba(13,31,88,1)));
@@ -56,4 +56,53 @@
 .animated.fastest {
     -webkit-animation-duration: 200ms;
     animation-duration: 200ms;
-  }
+}
+
+.login {
+    transform: translate(15%, 50%);
+}
+
+.selected {
+    background-color: $indigo !important;
+    color: $white !important;
+}
+
+.fw100 {
+    font-weight: 100;
+}
+
+.fw200 {
+    font-weight: 200;
+}
+
+.fw300 {
+    font-weight: 300;
+}
+
+.fw400 {
+    font-weight: 400;
+}
+
+.fw500 {
+    font-weight: 500;
+}
+
+.fw600 {
+    font-weight: 600;
+}
+
+.fw700 {
+    font-weight: 700;
+}
+
+.fw800 {
+    font-weight: 800;
+}
+
+.fw900 {
+    font-weight: 900;
+}
+
+table.dataTable td {
+    font-weight: 500 !important;
+}

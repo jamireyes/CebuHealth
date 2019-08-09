@@ -4,7 +4,7 @@
 
 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
     <div class="row">
-        <div class="col"><h3 class="text-secondary mb-4">Dashboard</h3></div>
+        <div class="col"><h3 class="text-secondary mb-4"><i class="fas fa-tachometer-alt pr-2"></i> Dashboard</h3></div>
     </div>
     <div class="row">
         <div class="container col-lg-4">
