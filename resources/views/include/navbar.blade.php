@@ -11,13 +11,13 @@
                 @if (Auth::check())
                     @if(Auth::user()->RoleID == 1)
                         <li class="nav-item">
-                            <a class="nav-link {{ (Route::current()->getName() == 'Dashboard') ? 'active' : '' }}" href="{{ route('Dashboard') }}">Dashboard</a>
+                            <a class="nav-link {{ (Route::current()->getName() == 'Dashboard') ? 'active font-weight-bold primary' : '' }}" href="{{ route('Dashboard') }}">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ (Route::current()->getName() == 'Account.index') ? 'active' : '' }}" href="{{ route('Account.index') }}">User Account</a>
+                            <a class="nav-link {{ (Route::current()->getName() == 'Account.index') ? 'active font-weight-bold primary' : '' }}" href="{{ route('Account.index') }}">User Account</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ (Route::current()->getName() == 'Data.index') ? 'active' : '' }}" href="{{ route('Data.index')}}">Data Entry</a>
+                            <a class="nav-link {{ (Route::current()->getName() == 'Data.index') ? 'active font-weight-bold primary' : '' }}" href="{{ route('Data.index')}}">Data Entry</a>
                         </li>
                     @endif
                 @endif

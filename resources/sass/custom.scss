@@ -1,13 +1,13 @@
 .custom-nav {
-    background-color: #0D1F58;
+    background-color: #0D1F58 !important;
 }
 
 .bg-blue {
-    background-color: #0D1F58;
+    background-color: #0D1F58 !important;
 }
 
 .color-white {
-    color: white;
+    color: white !important;
 }
 
 .bg-custom {
@@ -22,35 +22,35 @@
 }
 
 .warning {
-    color: #ffed4a;
+    color: #ffed4a !important;
 }
 
 .warning:hover {
-    color: #ffe924;
+    color: #ffe924 !important;
 }
 
 .danger {
-    color: #e3342f;
+    color: #e3342f !important;
 }
 
 .danger:hover {
-    color: #d0211c;
+    color: #d0211c !important;
 }
 
 .primary {
-    color: #3490dc;
+    color: $blue !important;
 }
 
 .primary:hover {
-    color: #227dc7;
+    color: #227dc7 !important;
 }
 
 .success {
-    color: #38c172;
+    color: #38c172 !important;
 }
 
 .success:hover {
-    color: #2fa360;
+    color: #2fa360 !important;
 }
 
 .animated.fastest {

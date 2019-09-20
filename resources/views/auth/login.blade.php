@@ -27,7 +27,7 @@
                             <div class="card-body">
                                 <h1>Login</h1>
                                 <p class="text-muted">Sign In to your account</p> 
-                                <form method="POST" action="{{ route('login') }}" autocomplete="off">
+                                <form method="POST" action="{{ route('login') }}">
                                     @csrf               
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
@@ -55,11 +55,13 @@
                 
                                     <div class="d-flex">
                                         <div class="mr-auto">
-                                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                                            <button type="submit" class="btn btn-primary btn-block">{{ __('Login') }}</button>
                                         </div>
                                         <div>
                                             @if (Route::has('password.request'))
-                                                <button class="btn btn-link btn-block" href="{{ route('password.request') }}">Forgot Your Password?</button>
+                                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                                    {{ __('Forgot Your Password?') }}
+                                                </a>
                                             @endif
                                         </div>
                                     </div>

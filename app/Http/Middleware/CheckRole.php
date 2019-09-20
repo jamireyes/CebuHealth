@@ -14,12 +14,17 @@ class CheckRole
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $role)
+    public function handle($request, Closure $next)
     {
-        if (Auth::user()->role->Description != $role) {
-            abort(401, 'Unauthorized Request!');
+        $roles = array_slice(func_get_args(), 2);
+
+        foreach($roles as $role){
+            if (Auth::user()->role->Description == $role) {
+                return $next($request);
+            }
         }
-        return $next($request);
+
+        abort(401, 'Unauthorized Request!');
     }
 
 }
