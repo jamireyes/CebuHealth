@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light shadow">
     <div class="container">
-        <img src="{{ asset('storage/Icon.png') }}" class="col-sm-5 col-md-3 col-lg-2 col-xl-2">
+        <img src="{{ asset('img/Icon.png') }}" class="col-sm-5 col-md-3 col-lg-2 col-xl-2">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>

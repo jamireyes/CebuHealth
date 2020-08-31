@@ -19,7 +19,7 @@
                         <div class="card">
                             <div class="card-body d-flex">
                                 <div class="align-self-center text-center">
-                                    <img src="{{ asset('storage/Icon.png') }}" style="max-width: 85%;">
+                                    <img src="{{ asset('img/Icon.png') }}" style="max-width: 85%;">
                                 </div>
                             </div>
                         </div>
