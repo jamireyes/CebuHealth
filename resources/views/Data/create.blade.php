@@ -6,12 +6,14 @@
         <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12">
             @include('include.message')
             <div class="card shadow">
-                <div class="card-header bg-white">
-                    <div class="d-flex justify-content-start mx-4">
-                        <a href="{{(Auth::user()->RoleID == 1) ? route('Data.index') : route('Data.DataEntryIndex', Auth::user()->username)}}"><i class="fa fa-arrow-circle-right fa-2x text-primary" aria-hidden="true"></i></a>
-                    </div>
-                </div>
                 <div class="card-body px-5 py-5">
+                    <div class="d-flex justify-content-center mb-5">
+                        <div class="position-absolute px-5" style="left:0;">
+                            <a href="{{(Auth::user()->RoleID == 1) ? route('Data.index') : route('Data.DataEntryIndex', Auth::user()->username)}}"><i class="fa fa-arrow-circle-left fa-2x text-secondary" aria-hidden="true"></i></a>
+                        </div>
+                        <div><h3>Add Data Entry</h3></div>
+                        <div></div>
+                    </div>
                     <form action="{{ route('Data.store') }}" method="post" autocomplete="no">
                         @csrf
                         <div class="form-row">

@@ -237,26 +237,6 @@ class DataController extends Controller
     {
         $array = json_decode($request->data);        
         foreach($array as $row){
-            // $this->validate($data, [
-            //     'ClusterNo' => 'required',
-            //     'DistrictNo' => 'required',
-            //     'mLGU_No' => 'required',
-            //     'BarangayNo' => 'required',
-            //     'LName' => 'required',
-            //     'FName' => 'required',
-            //     'MI' => 'required',
-            //     'Birthdate' => 'required',
-            //     'Gender' => 'required',
-            //     'Weight_kg' => 'required',
-            //     'Height_cm' => 'required',
-            //     'BloodTypeID' => 'required',
-            //     'Contact_No' => 'required',
-            //     'House_No' => 'required',
-            //     'Street_Name' => 'required',
-            //     'Sitio' => 'required',
-            //     'Purok' => 'required',
-            //     'Barangay' => 'required',
-            // ]);
 
             $data = new Data;
             $data->User_ID = Auth::user()->id;
@@ -279,7 +259,6 @@ class DataController extends Controller
             $data->Purok = $row->Purok;
             $data->Barangay = $row->Barangay;
             $data->save();
-            // toastr()->success('New Entry Added!', 'Successful!');
         }
     }
 
