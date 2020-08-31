@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Data;
-use App\Clusters;
-use App\Districts;
+use App\clusters;
+use App\districts;
 use App\mlgu;
 use DB;
 
@@ -34,7 +34,7 @@ class DashboardController extends Controller
     {
         $Cluster_Count = [];
 
-        for($x = 1; $x <= Clusters::all()->count(); $x++){
+        for($x = 1; $x <= clusters::all()->count(); $x++){
             $Cluster_Count[$x-1] = Data::all()->where('ClusterNo', $x)->count();
         }
 
@@ -47,7 +47,7 @@ class DashboardController extends Controller
     {
         $District_Count = [];
 
-        for($x = 1; $x <= Districts::all()->count(); $x++){
+        for($x = 1; $x <= districts::all()->count(); $x++){
             $District_Count[$x-1] = Data::all()->where('DistrictNo', $x)->count();
         }
 
