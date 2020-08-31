@@ -45,7 +45,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $table = 'Users';
+    protected $table = 'users';
     public $primarykey = 'id';
     protected $dates = ['deleted_at'];
     protected $with = ['role'];
