@@ -30,7 +30,7 @@
   "dependencies": {
     "animate.css": "^3.7.2",
     "chart.js": "^2.8.0",
-    "datatables.net": "^1.10.19",
+    "datatables.net": "^1.10.22",
     "datatables.net-bs4": "^1.10.19",
     "font-awesome": "^4.7.0",
     "offline-npm": "^0.2.2",
